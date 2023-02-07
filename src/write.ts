@@ -19,6 +19,7 @@ const point1 = new Point('param_data')
   .tag('company', 'taeyeong')
   .tag('machine_code', 'E1')
   .floatField('press_parameter_101', 20 + Math.round(100 * Math.random()) / 10)
+  .floatField('press_parameter_102', 20 + Math.round(100 * Math.random()) / 10)
 writeApi.writePoint(point1)
 console.log(` ${point1}`)
 // // write point with a custom timestamp
