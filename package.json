@@ -12,7 +12,9 @@
   "license": "ISC",
   "dependencies": {
     "@influxdata/influxdb-client": "^1.33.1",
-    "dotenv": "^16.0.3"
+    "dotenv": "^16.0.3",
+    "modbus-stream": "^0.46.0",
+    "modbus-tcp": "^0.4.13"
   },
   "devDependencies": {
     "ts-node": "^10.9.1",
