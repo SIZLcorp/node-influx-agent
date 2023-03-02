@@ -1,6 +1,8 @@
 const { printHEXPretty } = require('../util')
 
 function parseResponse (buf) {
+  console.log('ressssss'
+  )
   let pointer = 0
   function getSlice (buf, size) {
     const ret = buf.subarray(0 + pointer, size + pointer)
