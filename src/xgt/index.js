@@ -9,7 +9,7 @@ const generateReadData = require('./generate/read')
 const XGTSocket = net.createConnection({ port: 2004, host: '192.168.100.110' })
 XGTSocket.on('connect', () => {
   console.log('========= CONNECTED!')
-  let dataAddr = '%CB000024' // 왜 이렇게? 알고싶었던 것은 C12
+  let dataAddr = '%CB000020' // 왜 이렇게? 알고싶었던 것은 C12
   let temp = generateReadData(dataAddr, 'seq')
 
   let header = generateHeader(temp)

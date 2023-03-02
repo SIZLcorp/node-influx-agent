@@ -9,7 +9,7 @@ const generateWriteData = require('./generate/write')
 const XGTSocket = net.createConnection({ port: 2004, host: '192.168.100.110' })
 XGTSocket.on('connect', () => {
   console.log('========= CONNECTED!')
-  let dataAddr = '%CB000024' // 왜 이렇게? 알고싶었던 것은 C12
+  let dataAddr = '%CB000020' // 왜 이렇게? 알고싶었던 것은 C12
   let temp = generateWriteData(dataAddr, 'seq', Buffer.from([0x0b, 0x00]))
 
   let header = generateHeader(temp)
