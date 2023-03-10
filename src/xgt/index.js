@@ -1,7 +1,7 @@
 const net = require('net')
 
-const parseRequest = require('./parse/request')
-const parseResponse = require('./parse/response')
+const {parseReadRequest} = require('./parse/request')
+const { parseReadResponse } = require('./parse/response')
 const { printHEXPretty } = require('./util')
 const generateHeader = require('./generate/header')
 const generateReadData = require('./generate/read')
@@ -9,7 +9,7 @@ const generateReadData = require('./generate/read')
 const XGTSocket = net.createConnection({ port: 2004, host: '192.168.100.110' })
 XGTSocket.on('connect', () => {
   console.log('========= CONNECTED!')
-  let dataAddr = '%CB000020' // 왜 이렇게? 알고싶었던 것은 C12
+  let dataAddr = '%CB000024' // 왜 이렇게? 알고싶었던 것은 C12
   let temp = generateReadData(dataAddr, 'seq')
 
   let header = generateHeader(temp)
@@ -23,13 +23,13 @@ XGTSocket.on('connect', () => {
 XGTSocket.on('data', serverData => {
   console.log(`[client] received data from server: 
 ${printHEXPretty(serverData)}`)
-  parseResponse(serverData)
+  parseReadResponse(serverData)
   XGTSocket.destroy()
 })
 
 
 function request_data (reqData) {
   console.log('[server] request from client: \n', printHEXPretty(reqData))
-  parseRequest(reqData)
+  parseReadRequest(reqData)
   XGTSocket.write(reqData)
 }

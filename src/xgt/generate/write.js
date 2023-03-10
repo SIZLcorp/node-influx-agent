@@ -1,4 +1,6 @@
 function writeData (address, dataType, buf) {
+  console.log('buf->',buf)
+  console.log(buf.length)
   let data
   let command = Buffer.from([0x58, 0x00])
   let set_data_Type = setDataType(dataType)
@@ -7,7 +9,7 @@ function writeData (address, dataType, buf) {
   let addr = Buffer.from(address, 'utf8')
   let addr_length = Buffer.from([addr.length, 0x00])
   let buffer_length = Buffer.from([buf.length, 0x00])
-  let total_length = command.length + set_data_Type.length + reserved.length + block.length + addr_length.length + addr.length + buffer_length.length
+  let total_length = command.length + set_data_Type.length + reserved.length + block.length + addr_length.length + addr.length + buffer_length.length + 2
   data = Buffer.concat([command, set_data_Type, reserved, block, addr_length, addr, buffer_length, buf], total_length)
   // console.log('READ DATA', data)
 
