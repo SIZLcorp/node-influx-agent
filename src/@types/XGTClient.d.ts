@@ -1,4 +1,4 @@
-import { NetConnectOpts } from 'net';
+// import { NetConnectOpts } from 'net';
 
 declare module "XGTClient" {
   export enum XGTDataType {
@@ -10,11 +10,13 @@ declare module "XGTClient" {
     'seq'
   }
 
-  export type XGTArea = 'c' | 'd' | 'w' | 'x' | 'y' | 'z' | 't' | 's' | 'm' | 'l' | 'f' | 'v' | 'b' | 'r'
+  export type XGTArea = 'P' | 'M' | 'L' | 'F' | 'K' | 'C' | 'D' | 'T' | 'N' | 'R'
   export type XGTAddressType = `${XGTArea}${number}`
 
-  interface XGTClientConfig extends NetConnectOpts {
-
+  export interface XGTClientConfig {
+    port: number
+    host: string
+    equipmentName?: string
   }
 
 }
