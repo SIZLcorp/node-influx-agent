@@ -1,5 +1,6 @@
+import { XGTDataType } from "XGTClient"
 
-function setDataType(dataType: XGTDataType) {
+export function setDataType(dataType: XGTDataType): Buffer {
   let temp
   switch (dataType) {
     case 'bit':
