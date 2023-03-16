@@ -7,6 +7,20 @@ export function printHEXPretty(str: Buffer): string | undefined {
   return str.toString('hex').match(/.{2}/g)?.join(' ')
 }
 
+export class BufferSlicer {
+  pointer = 0
+  constructor() {
+    this.pointer = 0
+  }
+  getSlice(buf: Buffer, size: number) {
+    const ret = buf.subarray(0 + this.pointer, size + this.pointer)
+    this.pointer += ret.length
+    return ret
+  }
+  getPointer(): number {
+    return this.pointer
+  }
+}
 
 export function XGTAddressGenerator(inp: XGTAddressType, dataType: XGTDataTypeChar): XGTProtocolAddressType {
 
