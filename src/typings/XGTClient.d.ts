@@ -12,5 +12,4 @@ declare module "XGTClient" {
     host: string
     equipmentName?: string
   }
-
 }
