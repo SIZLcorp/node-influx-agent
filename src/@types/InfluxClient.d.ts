@@ -10,6 +10,8 @@ declare module "InfluxClient" {
 
   export type InfluxDataType = 'integer' | 'float' | 'string'
 
+  export type InfluxTagField = 'machine_code' | 'protocol_type'
+
   //type 0
   export type InfluxPressDataField =
       'manufacturer'|
@@ -885,6 +887,11 @@ declare module "InfluxClient" {
       'slide_position_num'|
       'slide_position_state'|
       'slide_position_mode'
+
+  export interface InfluxTagData{
+    'machine_code':string, // 기계 p넘버
+    'protocol_type':number
+  }
 
   export interface InfluxPressData {
     // [InfluxCamField]: InfluxDataType
