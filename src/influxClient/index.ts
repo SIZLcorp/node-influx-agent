@@ -22,7 +22,7 @@ const fluxQuery =
 // See also rxjs-query.ts and queryWithParams.mjs .
 
 // Execute query and receive table metadata and table row values using async iterator.
-async function iterateRows () {
+async function iterateRows() {
   console.log('*** IterateRows ***')
   for await (const { values, tableMeta } of queryApi.iterateRows(fluxQuery)) {
     // the following line creates an object for each row
@@ -41,7 +41,7 @@ async function iterateRows () {
 iterateRows().catch((error) => console.error('IterateRows ERROR', error))
 
 // Execute query and receive table metadata and rows in a result observer.
-function queryRows () {
+function queryRows() {
   console.log('*** QueryRows ***')
   queryApi.queryRows(fluxQuery, {
     next: (row: string[], tableMeta: FluxTableMetaData) => {
@@ -69,7 +69,7 @@ queryRows()
 
 // Execute query and collect result rows in a Promise.
 // Use with caution, it copies the whole stream of results into memory.
-async function collectRows () {
+async function collectRows() {
   console.log('\n*** CollectRows ***')
   const data = await queryApi.collectRows(
     fluxQuery //, you can also specify a row mapper as a second argument
@@ -81,7 +81,7 @@ async function collectRows () {
 
 // Execute query and return the whole result as a string.
 // Use with caution, it copies the whole stream of results into memory.
-async function queryRaw () {
+async function queryRaw() {
   const result = await queryApi.queryRaw(fluxQuery)
   console.log(result)
   console.log('\nQueryRaw SUCCESS')
@@ -89,7 +89,7 @@ async function queryRaw () {
 // queryRaw().catch((error) => console.error('QueryRaw ERROR', error))
 
 // Execute query and receive result CSV lines in an observer
-function queryLines () {
+function queryLines() {
   queryApi.queryLines(fluxQuery, {
     next: (line: string) => {
       console.log(line)
@@ -106,7 +106,7 @@ function queryLines () {
 // queryLines()
 
 // Execute query and receive result csv lines using async iterable
-async function iterateLines () {
+async function iterateLines() {
   for await (const line of queryApi.iterateLines(fluxQuery)) {
     console.log(line)
   }
