@@ -24,7 +24,7 @@
 // }
 import { XGTClient } from '../xgtClient'
 import { XGTAddressType, XGTClientConfig, XGTDataTypeChar } from 'XGTClient'
-import { InfluxCamField, InfluxPressDataField, InfluxDataType } from 'InfluxClient'
+import { InfluxCamField, InfluxPressDataField } from 'InfluxClient'
 // import { SutechConfigItem } from "SutechAgent"
 
 export interface SutechConfigItem {
@@ -44,10 +44,10 @@ export class SutechEquipment {
     this.reset()
   }
   async scan() {
-    // TODO: 메모리 맵 보고 하나씩 읽어오기
-
     // memoryMap iteration (Async)
-    await this.memoryMap.forEach(async (item) => {
+    await this.memoryMap.forEach(async (item: SutechConfigItem) => {
+      console.log('item', item)
+
       const data = await this.xgtClient.readData(item.plcAddress, item.dataType)
       this.memory = {
         ...this.memory,

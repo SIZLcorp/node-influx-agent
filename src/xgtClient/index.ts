@@ -37,14 +37,18 @@ export class XGTClient {
     const self = this
     const socket = net.createConnection(this.config)
     this.socket = socket
+    console.log('소켓 접속', this.config)
 
     return new Promise((resolve, reject) => {
       socket.once('connect', () => {
         this.status = 'CONNECTED'
+        console.log('소켓 접속됨')
+
         resolve(socket)
       })
       socket.once("error", (err) => {
         this.status = 'ERROR'
+        console.log('소켓 에러', err)
         self.disconnect()
         reject(err)
       })
@@ -78,7 +82,7 @@ export class XGTClient {
     return this.request_data(reqData)
   }
 
-  async request_data(reqData: Buffer): Promise<number> {
+  private async request_data(reqData: Buffer): Promise<number> {
     const self = this
     // TODO: 요청을 동시에 보내는걸 막아야 한다. 그렇다면 queue처럼 동작해야 할까?
     // 일단은 그렇게까지는 하지 말고, 내부적으로만 여러 요청이 동시에 가지 않는다고 가정만 하자..
