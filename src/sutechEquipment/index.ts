@@ -45,7 +45,7 @@ export class SutechEquipment {
   }
   async scan() {
     // memoryMap iteration (Async)
-    await this.memoryMap.forEach(async (item: SutechConfigItem) => {
+    for (const item of this.memoryMap) {
       console.log('item', item)
 
       const data = await this.xgtClient.readData(item.plcAddress, item.dataType)
@@ -53,7 +53,7 @@ export class SutechEquipment {
         ...this.memory,
         [item.dataCode]: data
       }
-    })
+    }
   }
   reset() {
     this.memory = {
