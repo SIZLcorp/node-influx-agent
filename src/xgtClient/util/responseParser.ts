@@ -46,7 +46,7 @@ RESERVED2\t\t${printHEXPretty(reserved2)}`)
 데이터타입\t\t${printHEXPretty(type)}
 예약영역\t\t${printHEXPretty(block)}
 에러상태\t\t${printHEXPretty(error_status)}
-에러정보\t\t${printHEXPretty(value)}
+에러정보/변수개수\t${printHEXPretty(value)}
 데이터크기\t\t${printHEXPretty(data_size)} \t${data_size.readIntLE(0, data_size.length)}
 데이터\t\t\t${printHEXPretty(data)} \t${data.readIntLE(0, data.length)}`)
 }
