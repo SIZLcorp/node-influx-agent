@@ -9,7 +9,7 @@ import generateHeader from './generator/header'
 import generateReadData from './generator/read'
 
 
-type SocketStatus = 'CONNECTED' | 'DISCONNECTED' | 'ERROR'
+type SocketStatus = 'CONNECTED' | 'DISCONNECTED' | 'ERROR' | 'CONNECTING'
 export class XGTClient {
   private static instance: XGTClient
   socket: net.Socket | null = null
@@ -35,25 +35,29 @@ export class XGTClient {
   // 명시적으로 접속을 요청해야함 connect
   connect(): Promise<net.Socket> {
     const self = this
+    if (this.status !== 'DISCONNECTED') {
+      return Promise.reject(new Error('Already connected'))
+    }
     const socket = net.createConnection(this.config)
     this.socket = socket
+    this.status = 'CONNECTING'
     console.log('소켓 접속', this.config)
 
     return new Promise((resolve, reject) => {
       socket.once('connect', () => {
-        this.status = 'CONNECTED'
+        self.status = 'CONNECTED'
         console.log('소켓 접속됨')
 
         resolve(socket)
       })
       socket.once("error", (err) => {
-        this.status = 'ERROR'
+        self.status = 'ERROR'
         console.log('소켓 에러', err)
         self.disconnect()
         reject(err)
       })
       socket.once('close', () => {
-        this.status = 'DISCONNECTED'
+        self.status = 'DISCONNECTED'
       })
     })
 
@@ -86,7 +90,7 @@ export class XGTClient {
     const self = this
     // TODO: 요청을 동시에 보내는걸 막아야 한다. 그렇다면 queue처럼 동작해야 할까?
     // 일단은 그렇게까지는 하지 말고, 내부적으로만 여러 요청이 동시에 가지 않는다고 가정만 하자..
-    if (this.status !== 'CONNECTED') {
+    if (this.status == 'DISCONNECTED') {
       await this.connect()
     }
 
