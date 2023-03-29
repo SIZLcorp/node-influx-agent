@@ -1,23 +1,34 @@
-import { XGTClient } from './xgtClient'
+import { SutechEquipment } from "./sutechEquipment"
 
-const xgtClient = XGTClient.getInstance({
+const sutechEquipment = new SutechEquipment({
   port: 2004,
-  host: '192.168.100.110'
-})
+  host: '192.168.100.110',
+}, [{
+  plcAddress: 'C10',
+  name: "기계 전체 카운터",
+  dataCode: "press_whole_counter",
+  dataType: "B"
+}, {
+  plcAddress: 'C12',
+  name: "전원 켜진 이후 토탈 카운터",
+  dataCode: "press_total_counter",
+  dataType: "B"
+}, {
+  plcAddress: 'D4020',
+  name: "프리셋 카운터(셋팅 카운터)",
+  dataCode: "press_preset_counter",
+  dataType: "B"
+}, {
+  plcAddress: 'M60',
+  name: "운전 준비 완료",
+  dataCode: "press_run_ready",
+  dataType: "B"
+}])
 
 async function run() {
-  const total_count = await xgtClient.readData('C12', 'B')
-  const press_acc_count = await xgtClient.readData('C10', 'B')
-  const preset_count = await xgtClient.readData('D4020', 'B')
-  const ready_status = await xgtClient.readData('M60', 'B')
+  await sutechEquipment.scan()
 
-  console.log({
-    total_count,
-    press_acc_count,
-    preset_count,
-    ready_status
-  })
+  console.log(sutechEquipment.getMemory())
 }
-
 
 run()
