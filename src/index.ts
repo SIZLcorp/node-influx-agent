@@ -49,7 +49,9 @@ const sutechEquipment = new SutechEquipment({
   },
   {
     "dataCode": "press_preset_limit_counter",
-    "plcAddress": "L353",
+    "plcAddress": "L35",
+    // 3번째 비트를 써야함
+    "bitIndex": 3,
     "name": "프레스 프리셋 리밋",
     "dataType": "B"
   },
@@ -62,6 +64,7 @@ const sutechEquipment = new SutechEquipment({
   {
     "dataCode": "press_key_cam",
     "plcAddress": "M75",
+    // TODO: 별도 Parser가 필요함 제스텍과 형식 맞추기 위해
     "name": "키캠값",
     "dataType": "B"
   },
@@ -86,6 +89,7 @@ const sutechEquipment = new SutechEquipment({
   {
     "dataCode": "press_error_number",
     "plcAddress": "F50",
+    // TODO: 별도 Parser가 필요함 제스텍과 형식 맞추기 위해
     "name": "에러 번호",
     "dataType": "B"
   }

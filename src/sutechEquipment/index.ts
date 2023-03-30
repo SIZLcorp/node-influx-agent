@@ -6,6 +6,7 @@ import { InfluxCamField, InfluxPressDataField } from 'InfluxClient'
 // 수테크 장비를 모킹함, 장비 내의 메모리맵들 최신값 유지할 수 있도록
 export interface SutechConfigItem {
   plcAddress: XGTAddressType
+  bitIndex?: number
   name: string
   dataCode: InfluxCamField | InfluxPressDataField
   dataType: XGTDataTypeChar
@@ -40,9 +41,14 @@ export class SutechEquipment {
     // memoryMap iteration (Async)
     for (const item of this.memoryMap) {
       const data = await this.xgtClient.readData(item.plcAddress, item.dataType)
+
+      let parsedData: number | boolean | string = data
+      if (item.bitIndex !== undefined) {
+        parsedData = data.toString(2).charAt(item.bitIndex) === '1'
+      }
       this.memory = {
         ...this.memory,
-        [item.dataCode]: data
+        [item.dataCode]: parsedData
       }
     }
     this.isScanning = false
