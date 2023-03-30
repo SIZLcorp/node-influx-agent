@@ -92,6 +92,50 @@ const sutechEquipment = new SutechEquipment({
     // TODO: 별도 Parser가 필요함 제스텍과 형식 맞추기 위해
     "name": "에러 번호",
     "dataType": "B"
+  },
+  {
+    "dataCode": "press_motor_state",
+    "plcAddress": "M000",
+    "name": "모터 상태값",
+    "dataType": "B"
+  },
+  {
+    "dataCode": "press_run_state",
+    "plcAddress": "M100",
+    "name": "운전 상태",
+    "dataType": "B"
+  },
+  {
+    "dataCode": "press_safety_one_cycle_stop_angle",
+    "plcAddress": "L31",
+    "name": "크랭크 멈춤각",
+    "dataType": "B"
+  },
+  // {
+  //   "dataCode": "press_temperature_value_1",
+  //   "plcAddress": "",
+  //   "name": "온도(6개)",
+  //   "dataType": "B"
+  // },
+  {
+    "dataCode": "press_angle",
+    "plcAddress": "L61",
+    "name": "크랭크 각도",
+    "dataType": "B"
+  },
+  {
+    "dataCode": "press_operator_run_time",
+    "plcAddress": "C25",
+    // TODO: 시간 형식 읽을 수 있어야 함
+    "name": "프레스 크랭크 가동시간",
+    "dataType": "B"
+  },
+  {
+    "dataCode": "press_operator_stop_time",
+    "plcAddress": "C28",
+    // TODO: 시간 형식 읽을 수 있어야 함
+    "name": "유휴시간",
+    "dataType": "B"
   }
 ])
 
