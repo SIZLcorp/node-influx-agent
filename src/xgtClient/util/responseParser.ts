@@ -67,7 +67,7 @@ RESERVED2\t\t${printHEXPretty(reserved2)}`)
       command: command.readIntLE(0, command.length),
       type: type.readIntLE(0, type.length),
       // block,
-      error_status: plc_info.readIntLE(0, plc_info.length),
+      error_status: error_status.readIntLE(0, error_status.length),
       value: value.readIntLE(0, value.length),
       ...(data_size && {
         data_size: data_size.readIntLE(0, data_size.length),
