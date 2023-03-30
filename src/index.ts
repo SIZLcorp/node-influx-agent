@@ -41,17 +41,21 @@ const sutechEquipment = new SutechEquipment({
     "name": "프레스 토탈 카운트",
     "dataType": "B"
   },
-  // {
-  //   "dataCode": "press_whole_counter",
-  //   "plcAddress": "C10",
-  //   "name": "프레스 누적 카운트",
-  //   "dataType": "B"
-  // },
+  {
+    "dataCode": "press_whole_counter",
+    "plcAddress": "C14",
+    "name": "프레스 누적 카운트(lower)",
+    "dataType": "B"
+  },
+  {
+    "dataCode": "press_whole_counter",
+    "plcAddress": "C15",
+    "name": "프레스 누적 카운트(upper)",
+    "dataType": "B"
+  },
   {
     "dataCode": "press_preset_limit_counter",
     "plcAddress": "D4020",
-    // 3번째 비트를 써야함
-    // "bitIndex": 3,
     "name": "프레스 프리셋 리밋",
     "dataType": "B"
   },
