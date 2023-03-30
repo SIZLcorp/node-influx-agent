@@ -1,36 +1,99 @@
 import { SutechEquipment } from "./sutechEquipment"
+const { INFLUX_URL, INFLUX_TOKEN, REPEAT_INTERVAL, EQUIPMENT_PORT, EQUIPMENT_HOST } = require('./env')
 
 const sutechEquipment = new SutechEquipment({
-  port: 2004,
-  host: '192.168.100.110',
+  port: EQUIPMENT_PORT,
+  host: EQUIPMENT_HOST,
 }, [
   {
-    plcAddress: 'C10',
-    name: "기계 전체 카운터",
-    dataCode: "press_whole_counter",
-    dataType: "B"
-  }, {
-    plcAddress: 'C12',
-    name: "전원 켜진 이후 토탈 카운터",
-    dataCode: "press_total_counter",
-    dataType: "B"
-  }, {
-    plcAddress: 'D4020',
-    name: "프리셋 카운터(셋팅 카운터)",
-    dataCode: "press_preset_counter",
-    dataType: "B"
-  }, {
-    plcAddress: 'M60',
-    name: "운전 준비 완료",
-    dataCode: "press_run_ready",
-    dataType: "B"
+    "dataCode": "press_spm",
+    "plcAddress": "L58",
+    "name": "분당 회전수(SPM)",
+    "dataType": "B"
+  },
+  {
+    "dataCode": "press_main_motor_current",
+    "plcAddress": "L59",
+    "name": "메인 모터 전류",
+    "dataType": "B"
+  },
+  {
+    "dataCode": "press_slide_motor_current",
+    "plcAddress": "L60",
+    "name": "슬라이드 모터 전류",
+    "dataType": "B"
+  },
+  {
+    "dataCode": "press_inverter_spm",
+    "plcAddress": "L58",
+    "name": "인버터 분당 회전수",
+    "dataType": "B"
+  },
+  {
+    "dataCode": "press_preset_counter",
+    "plcAddress": "D4020",
+    "name": "프레스 프리셋 카운트",
+    "dataType": "B"
+  },
+  {
+    "dataCode": "press_total_counter",
+    "plcAddress": "C12",
+    "name": "프레스 토탈 카운트",
+    "dataType": "B"
+  },
+  {
+    "dataCode": "press_whole_counter",
+    "plcAddress": "C10",
+    "name": "프레스 누적 카운트",
+    "dataType": "B"
+  },
+  {
+    "dataCode": "press_preset_limit_counter",
+    "plcAddress": "L353",
+    "name": "프레스 프리셋 리밋",
+    "dataType": "B"
+  },
+  {
+    "dataCode": "press_safety_one_cycle_slip_angle",
+    "plcAddress": "L33",
+    "name": "크랭크 슬립각",
+    "dataType": "B"
+  },
+  {
+    "dataCode": "press_key_cam",
+    "plcAddress": "M75",
+    "name": "키캠값",
+    "dataType": "B"
+  },
+  {
+    "dataCode": "press_run_ready",
+    "plcAddress": "M60",
+    "name": "운전 준비 상태 여부",
+    "dataType": "B"
+  },
+  {
+    "dataCode": "press_run_ok",
+    "plcAddress": "M70",
+    "name": "운전 가능 상태 여부",
+    "dataType": "B"
+  },
+  {
+    "dataCode": "press_motor_vector",
+    "plcAddress": "D4521",
+    "name": "모터 방향",
+    "dataType": "B"
+  },
+  {
+    "dataCode": "press_error_number",
+    "plcAddress": "F50",
+    "name": "에러 번호",
+    "dataType": "B"
   }
 ])
 
-async function run() {
+// async function run() {
+setInterval(async () => {
   await sutechEquipment.scan()
-
   console.log(sutechEquipment.getMemory())
-}
-
-run()
+  // writeInflux(sutechEquipment.getMemory())
+}, REPEAT_INTERVAL)
