@@ -31,27 +31,27 @@ const sutechEquipment = new SutechEquipment({
   },
   {
     "dataCode": "press_preset_counter",
-    "plcAddress": "D4020",
+    "plcAddress": "C12",
     "name": "프레스 프리셋 카운트",
     "dataType": "B"
   },
   {
     "dataCode": "press_total_counter",
-    "plcAddress": "C12",
+    "plcAddress": "C10",
     "name": "프레스 토탈 카운트",
     "dataType": "B"
   },
-  {
-    "dataCode": "press_whole_counter",
-    "plcAddress": "C10",
-    "name": "프레스 누적 카운트",
-    "dataType": "B"
-  },
+  // {
+  //   "dataCode": "press_whole_counter",
+  //   "plcAddress": "C10",
+  //   "name": "프레스 누적 카운트",
+  //   "dataType": "B"
+  // },
   {
     "dataCode": "press_preset_limit_counter",
-    "plcAddress": "L35",
+    "plcAddress": "D4020",
     // 3번째 비트를 써야함
-    "bitIndex": 3,
+    // "bitIndex": 3,
     "name": "프레스 프리셋 리밋",
     "dataType": "B"
   },
@@ -70,13 +70,15 @@ const sutechEquipment = new SutechEquipment({
   },
   {
     "dataCode": "press_run_ready",
-    "plcAddress": "M60",
+    "plcAddress": "M006",
+    "bitIndex": 0,
     "name": "운전 준비 상태 여부",
     "dataType": "B"
   },
   {
     "dataCode": "press_run_ok",
-    "plcAddress": "M70",
+    "plcAddress": "M007",
+    "bitIndex": 0,
     "name": "운전 가능 상태 여부",
     "dataType": "B"
   },
@@ -96,12 +98,14 @@ const sutechEquipment = new SutechEquipment({
   {
     "dataCode": "press_motor_state",
     "plcAddress": "M000",
+    "bitIndex": 0,
     "name": "모터 상태값",
     "dataType": "B"
   },
   {
     "dataCode": "press_run_state",
-    "plcAddress": "M100",
+    "plcAddress": "M10",
+    "bitIndex": 0,
     "name": "운전 상태",
     "dataType": "B"
   },
