@@ -47,10 +47,11 @@ RESERVED2\t\t${printHEXPretty(reserved2)}`)
 데이터타입\t\t${printHEXPretty(type)}
 예약영역\t\t${printHEXPretty(block)}
 에러상태\t\t${printHEXPretty(error_status)}
-에러정보\t\t${printHEXPretty(value)}
-데이터크기\t\t${printHEXPretty(data_size)} \t${data_size.readIntLE(0, data_size.length)}
+에러정보\t\t${printHEXPretty(value)}`)
+  if (data_size) {
+    console.warn(`데이터크기\t\t${printHEXPretty(data_size)} \t${data_size.readIntLE(0, data_size.length)}
 데이터\t\t\t${printHEXPretty(data)} \t${data.readIntLE(0, data.length)}`)
-
+  }
   return {
     header: {
       company_id: company_id.toString(),
@@ -68,8 +69,12 @@ RESERVED2\t\t${printHEXPretty(reserved2)}`)
       // block,
       error_status: plc_info.readIntLE(0, plc_info.length),
       value: value.readIntLE(0, value.length),
-      data_size: data_size.readIntLE(0, data_size.length),
-      data: data.readIntLE(0, data.length)
+      ...(data_size && {
+        data_size: data_size.readIntLE(0, data_size.length),
+      }),
+      ...(data && {
+        data: data.readIntLE(0, data.length)
+      })
     }
   }
 }
