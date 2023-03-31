@@ -12,4 +12,24 @@ declare module "XGTClient" {
     host: string
     equipmentName?: string
   }
+
+  export interface XGTReadResponse {
+    header: {
+      company_id: string,
+      plc_info: number,
+      cpu_info: string,
+      frame_dir: string,
+      InvokeID: number,
+      data_length: number,
+      fenetPos: string,
+    },
+    body: {
+      command: number,
+      type: number,
+      error_status: number,
+      value: number,
+      data_size: number,
+      data: number
+    }
+  }
 }

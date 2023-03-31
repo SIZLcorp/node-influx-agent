@@ -4,15 +4,19 @@
 //////////////////////////////////////////
 import * as dotenv from 'dotenv' // see https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
 dotenv.config()
-import {InfluxDB, Point, HttpError} from '@influxdata/influxdb-client'
-import {url, token, org, bucket} from './env'
-import {hostname} from 'node:os'
+import { InfluxDB, Point, HttpError } from '@influxdata/influxdb-client'
+import { INFLUX_URL, INFLUX_TOKEN, INFLUX_ORG, INFLUX_BUCKET } from '../env'
+
+import { hostname } from 'node:os'
 
 console.log('*** WRITE POINTS ***')
 // create a write API, expecting point timestamps in nanoseconds (can be also 's', 'ms', 'us')
-const writeApi = new InfluxDB({url, token}).getWriteApi(org, bucket, 'ns')
+const writeApi = new InfluxDB({ url: INFLUX_URL, token: INFLUX_TOKEN }).getWriteApi(INFLUX_ORG, INFLUX_BUCKET, 'ns')
 // setup default tags for all writes through this API
-writeApi.useDefaultTags({location: hostname()})
+writeApi.useDefaultTags({ location: hostname() })
+
+// 일단 기존 제스텍에서 넣는거랑 똑같은 모양으로 param_data 넣을 수 있어야함!
+// 그다음 데이터 바인딩해서 넣자
 
 // write point with the current (client-side) timestamp
 const point1 = new Point('param_data')
@@ -37,7 +41,7 @@ console.log(` ${point1}`)
 //
 // close() flushes the remaining buffered data and then cancels pending retries.
 
-async function run () {
+async function run() {
   try {
     await writeApi.close()
     console.log('FINISHED ... now try ./query.ts')

@@ -6,6 +6,8 @@
   "scripts": {
     "read": "ts-node src/xgtClient/snippets/readSample.ts",
     "write": "ts-node src/xgtClient/snippets/writeSample.ts",
+    "agent": "ts-node src/index.ts",
+    "agent2": "ts-node src/index2.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

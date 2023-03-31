@@ -4,9 +4,10 @@
  * 들어온 응답값을 규칙에 따라 파싱해보고 파싱된 결과를 로깅함으로써 빨리 파악할 수 있도록
  * */
 
+import { XGTReadResponse } from 'XGTClient'
 import { printHEXPretty, BufferSlicer } from '.'
 
-export function parseReadResponse(buf: Buffer): void {
+export function parseReadResponse(buf: Buffer): XGTReadResponse {
   console.log('read response')
   const slicer = new BufferSlicer()
 
@@ -46,9 +47,36 @@ RESERVED2\t\t${printHEXPretty(reserved2)}`)
 데이터타입\t\t${printHEXPretty(type)}
 예약영역\t\t${printHEXPretty(block)}
 에러상태\t\t${printHEXPretty(error_status)}
-에러정보\t\t${printHEXPretty(value)}
-데이터크기\t\t${printHEXPretty(data_size)} \t${data_size.readIntLE(0, data_size.length)}
+에러정보\t\t${printHEXPretty(value)}`)
+  if (data_size) {
+    console.warn(`데이터크기\t\t${printHEXPretty(data_size)} \t${data_size.readIntLE(0, data_size.length)}
 데이터\t\t\t${printHEXPretty(data)} \t${data.readIntLE(0, data.length)}`)
+  }
+  return {
+    header: {
+      company_id: company_id.toString(),
+      plc_info: plc_info.readIntLE(0, plc_info.length),
+      cpu_info: cpu_info.toString(),
+      frame_dir: frame_dir.toString(),
+      InvokeID: InvokeID.readIntLE(0, InvokeID.length),
+      data_length: data_length.readIntLE(0, data_length.length),
+      fenetPos: fenetPos.toString(),
+      // reserved2: reserved2.toString()
+    },
+    body: {
+      command: command.readIntLE(0, command.length),
+      type: type.readIntLE(0, type.length),
+      // block,
+      error_status: error_status.readIntLE(0, error_status.length),
+      value: value.readIntLE(0, value.length),
+      ...(data_size && {
+        data_size: data_size.readIntLE(0, data_size.length),
+      }),
+      ...(data && {
+        data: data.readIntLE(0, data.length)
+      })
+    }
+  }
 }
 
 export function parseWriteResponse(buf: Buffer): void {
