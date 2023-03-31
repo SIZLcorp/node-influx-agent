@@ -14,6 +14,7 @@ export class InfluxClient {
 
   convert(data: EquipmentScanResult): EquipmentScanResult {
     let result = data
+    // true, false 로 받는것 0, 1 로 변환해야함
     return result
   }
 

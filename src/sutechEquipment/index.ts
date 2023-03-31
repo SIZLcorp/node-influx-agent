@@ -87,7 +87,7 @@ export class SutechEquipment {
     if (this.isScanning) {
       // 기달림..
       await new Promise((resolve, reject) => {
-        self.myEmitter.on('scanEnd', (result: unknown) => {
+        self.myEmitter.once('scanEnd', (result: unknown) => {
           resolve(result)
         })
         // TODO: 타임아웃 처리
