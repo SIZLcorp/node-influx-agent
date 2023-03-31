@@ -1,3 +1,5 @@
+import { SutechConfigItem } from "./sutechEquipment";
+
 export const mappingSetting: SutechConfigItem[] = [
   {
     "dataCode": "press_spm",
