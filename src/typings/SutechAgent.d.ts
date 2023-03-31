@@ -17,7 +17,6 @@ declare module "SutechAgent" {
     dataCode: InfluxCamField | InfluxPressDataField
     dataType: InfluxDataType
   }
-
 }
 
 // [

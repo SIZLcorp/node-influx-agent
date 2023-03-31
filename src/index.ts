@@ -1,10 +1,8 @@
-import { SutechEquipment } from "./sutechEquipment"
-const { INFLUX_URL, INFLUX_TOKEN, REPEAT_INTERVAL, EQUIPMENT_PORT, EQUIPMENT_HOST } = require('./env')
+const { INFLUX_URL, INFLUX_TOKEN, INFLUX_ORG, REPEAT_INTERVAL, EQUIPMENT_PORT, EQUIPMENT_HOST } = require('./env')
+import { InfluxClient } from "./influxClient"
+import { SutechConfigItem, SutechEquipment } from "./sutechEquipment"
 
-const sutechEquipment = new SutechEquipment({
-  port: EQUIPMENT_PORT,
-  host: EQUIPMENT_HOST,
-}, [
+const mappingSetting: SutechConfigItem[] = [
   {
     "dataCode": "press_spm",
     "plcAddress": "L58",
@@ -145,11 +143,21 @@ const sutechEquipment = new SutechEquipment({
     "name": "유휴시간",
     "dataType": "B"
   }
-])
+]
 
-// async function run() {
+const sutechEquipment = new SutechEquipment({
+  port: EQUIPMENT_PORT,
+  host: EQUIPMENT_HOST,
+}, mappingSetting)
+
+const influxClient = new InfluxClient({
+  url: INFLUX_URL,
+  token: INFLUX_TOKEN,
+  org: INFLUX_ORG
+})
+
 setInterval(async () => {
   await sutechEquipment.scan()
-  console.log(sutechEquipment.getMemory())
-  // writeInflux(sutechEquipment.getMemory())
+  const scanResult = await sutechEquipment.getMemory()
+  influxClient.write(scanResult)
 }, REPEAT_INTERVAL)

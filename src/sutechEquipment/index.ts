@@ -1,7 +1,11 @@
 import { XGTClient } from '../xgtClient'
 import { XGTAddressType, XGTClientConfig, XGTDataTypeChar } from 'XGTClient'
 import { InfluxCamField, InfluxPressDataField } from 'InfluxClient'
+import { EquipmentMemory, EquipmentScanResult } from 'SutechEquipment'
 // import { SutechConfigItem } from "SutechAgent"
+const EventEmitter = require('events');
+
+class MyEmitter extends EventEmitter { }
 
 // 수테크 장비를 모킹함, 장비 내의 메모리맵들 최신값 유지할 수 있도록
 export interface SutechConfigItem {
@@ -18,11 +22,15 @@ export class SutechEquipment {
   startAt: Date | null = null
   endAt: Date | null = null
   isScanning: boolean = false
-  memory: any
+  memory: EquipmentMemory = {}
+  myEmitter: MyEmitter;
+
   constructor(config: XGTClientConfig, memoryMap: SutechConfigItem[]) {
     this.xgtClient = XGTClient.getInstance(config)
     this.memoryMap = memoryMap
     this.reset()
+    this.myEmitter = new MyEmitter();
+
   }
   async scan(): Promise<void> {
     //  q:아직 작동중에 다시 데이터 취득 요청한다면?
@@ -52,6 +60,7 @@ export class SutechEquipment {
       }
     }
     this.isScanning = false
+    MyEmitter.emit('scanEnd', this.memory)
     this.endAt = new Date()
   }
   // f) 리셋 함수
@@ -71,11 +80,25 @@ export class SutechEquipment {
   }
   // f) 모아진 데이터 출력 함수
   // 인플럭스쪽에서 데이터 출력값 가지고 인플럭스 입력값 만들어야 한다.
-  getMemory() {
-    return {
+  async getMemory(): Promise<EquipmentScanResult> {
+    const self = this
+
+    // 아직 스캔중이라면..?
+    if (this.isScanning) {
+      // 기달림..
+      await new Promise((resolve, reject) => {
+        self.myEmitter.on('scanEnd', (result: unknown) => {
+          resolve(result)
+        })
+        // TODO: 타임아웃 처리
+      })
+    }
+
+    return ({
       ...this.memory,
       startAt: this.startAt,
       endAt: this.endAt
-    }
+    })
+
   }
 }
