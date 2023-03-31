@@ -1,17 +1,29 @@
-import { XGTClientConfig, XGTDataType, XGTAddressType } from "XGTClient"
+import { XGTClientConfig, XGTDataType, XGTAddressType, XGTDataTypeChar } from "XGTClient"
 
-import net from 'net'
+import * as net from 'net'
+import { XGTAddressGenerator, printHEXPretty } from './util'
+
+import { parseReadRequest } from './util/requestParser'
+import { parseReadResponse } from './util/responseParser'
+import generateHeader from './generator/header'
+import generateReadData from './generator/read'
 
 
-
-type SocketStatus = 'CONNECTED' | 'DISCONNECTED'
-class XGTClient {
+type SocketStatus = 'CONNECTED' | 'DISCONNECTED' | 'ERROR' | 'CONNECTING'
+export class XGTClient {
   private static instance: XGTClient
   socket: net.Socket | null = null
   status: SocketStatus = 'DISCONNECTED'
   config: XGTClientConfig
+
   private constructor(config: XGTClientConfig) {
+    const self = this
     this.config = config
+
+    // Gracefully.. 프로세스 종료 감지시 disconnect 요청함
+    process.on('SIGINT', () => {
+      self.disconnect()
+    })
   }
   public static getInstance(config: XGTClientConfig) {
     if (!this.instance) {
@@ -22,23 +34,30 @@ class XGTClient {
 
   // 명시적으로 접속을 요청해야함 connect
   connect(): Promise<net.Socket> {
-    const socket = net.createConnection(this.config)
     const self = this
+    if (this.status !== 'DISCONNECTED') {
+      return Promise.reject(new Error('Already connected'))
+    }
+    const socket = net.createConnection(this.config)
     this.socket = socket
-    // Gracefully.. 프로세스 종료 감지시 disconnect 요청함
-    process.on('SIGINT', () => {
-      self.disconnect()
-    })
+    this.status = 'CONNECTING'
+    console.log('소켓 접속', this.config)
+
     return new Promise((resolve, reject) => {
       socket.once('connect', () => {
-        this.status = 'CONNECTED'
+        self.status = 'CONNECTED'
+        console.log('소켓 접속됨')
+
         resolve(socket)
       })
       socket.once("error", (err) => {
+        self.status = 'ERROR'
+        console.log('소켓 에러', err)
+        self.disconnect()
         reject(err)
       })
       socket.once('close', () => {
-        this.status = 'DISCONNECTED'
+        self.status = 'DISCONNECTED'
       })
     })
 
@@ -50,24 +69,56 @@ class XGTClient {
     if (this.socket) {
       this.socket.destroy()
       this.socket = null
+      this.status = 'DISCONNECTED'
     }
   }
 
 
-  async readData(address: XGTAddressType, dataType: XGTDataType): Promise<Buffer> {
-    if (this.status !== 'CONNECTED') {
-      this.socket = await this.connect()
+  async readData(address: XGTAddressType, dataType: XGTDataTypeChar): Promise<number> {
+    let dataAddr = XGTAddressGenerator(address, dataType)
+    let temp = generateReadData(dataAddr, 'seq')
+
+    let header = generateHeader(temp)
+    let total_length = temp.length + header.length
+    let reqData = Buffer.concat([header, temp], total_length)
+
+    // console.log(reqData)
+    return this.request_data(reqData)
+  }
+
+  private async request_data(reqData: Buffer): Promise<number> {
+    const self = this
+    // TODO: 요청을 동시에 보내는걸 막아야 한다. 그렇다면 queue처럼 동작해야 할까?
+    // 일단은 그렇게까지는 하지 말고, 내부적으로만 여러 요청이 동시에 가지 않는다고 가정만 하자..
+    if (this.status == 'DISCONNECTED') {
+      await this.connect()
     }
-  }
-  async readSeqData() {
 
-  }
-  async writeData(address: XGTAddressType, dataType: XGTDataType, buf: Buffer): Promise<> {
+    console.log('[server] request from client: \n', printHEXPretty(reqData))
+    parseReadRequest(reqData)
 
-  }
-  async writeSeqData() {
+    return new Promise((resolve, reject) => {
+      self.socket!.once('data', serverData => {
+        console.log(`[client] received data from server: 
+      ${printHEXPretty(serverData)}`)
+        const parsedResponse = parseReadResponse(serverData)
+        //TODO: 값 해석해서 결과만 돌려줘야함
+        resolve(parsedResponse?.body.data)
+      })
 
+      self.socket!.write(reqData)
+    })
   }
+
+  // async readSeqData() {
+
+  // }
+  // async writeData(address: XGTAddressType, dataType: XGTDataType, buf: Buffer): Promise<> {
+
+  // }
+  // async writeSeqData() {
+
+  // }
 }
 
 // export {
