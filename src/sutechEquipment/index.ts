@@ -3,7 +3,7 @@ import { XGTAddressType, XGTClientConfig, XGTDataTypeChar } from 'XGTClient'
 import { InfluxCamField, InfluxPressDataField } from 'InfluxClient'
 import { EquipmentMemory, EquipmentScanResult } from 'SutechEquipment'
 // import { SutechConfigItem } from "SutechAgent"
-const EventEmitter = require('events');
+import { EventEmitter } from 'node:events';
 
 class MyEmitter extends EventEmitter { }
 
@@ -60,7 +60,7 @@ export class SutechEquipment {
       }
     }
     this.isScanning = false
-    MyEmitter.emit('scanEnd', this.memory)
+    this.myEmitter.emit('scanEnd', this.memory)
     this.endAt = new Date()
   }
   // f) 리셋 함수
