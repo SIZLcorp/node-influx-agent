@@ -6,9 +6,9 @@
 import * as dotenv from 'dotenv' // see https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
 dotenv.config()
 import { InfluxDB, FluxTableMetaData } from '@influxdata/influxdb-client'
-import { url, token, org } from './env'
+import { INFLUX_URL, INFLUX_TOKEN, INFLUX_ORG } from '../env'
 
-const queryApi = new InfluxDB({ url, token }).getQueryApi(org)
+const queryApi = new InfluxDB({ url: INFLUX_URL, token: INFLUX_TOKEN }).getQueryApi(INFLUX_ORG)
 const fluxQuery =
   `from(bucket:"4MN60H_pms") |> range(start: -1d, stop: now())
   |> filter(fn: (r) => r["_measurement"] == "press_mon_data")
