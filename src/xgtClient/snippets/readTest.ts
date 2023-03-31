@@ -1,4 +1,4 @@
-import { XGTClient } from './xgtClient'
+import { XGTClient } from '..'
 
 const xgtClient = XGTClient.getInstance({
   port: 2004,
