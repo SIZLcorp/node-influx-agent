@@ -1,0 +1,12 @@
+{
+	"apps": [
+		{
+			"name": "Agent-P001",
+			"script": "node dist",
+			"env": {
+				"EQUIPMENT_HOST": "192.168.100.111",
+				"MACHINE_CODE": "P001"
+			}
+		}
+	]
+}
