@@ -1,3 +1,5 @@
+import * as dotenv from 'dotenv' // see https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
+dotenv.config()
 /** InfluxDB v2 URL */
 export const INFLUX_URL = process.env['INFLUX_URL'] || 'http://localhost:8086'
 /** InfluxDB authorization token */

@@ -5,8 +5,6 @@ import { EquipmentMemory, EquipmentScanResult } from 'SutechEquipment'
 // import { SutechConfigItem } from "SutechAgent"
 import { EventEmitter } from 'node:events';
 
-class MyEmitter extends EventEmitter { }
-
 // 수테크 장비를 모킹함, 장비 내의 메모리맵들 최신값 유지할 수 있도록
 export interface SutechConfigItem {
   plcAddress: XGTAddressType
@@ -16,21 +14,19 @@ export interface SutechConfigItem {
   dataType: XGTDataTypeChar
 }
 
-export class SutechEquipment {
+export class SutechEquipment extends EventEmitter {
   xgtClient: XGTClient
   memoryMap: SutechConfigItem[]
   startAt: Date | null = null
   endAt: Date | null = null
   isScanning: boolean = false
   memory: EquipmentMemory = {}
-  myEmitter: MyEmitter;
 
   constructor(config: XGTClientConfig, memoryMap: SutechConfigItem[]) {
+    super();
     this.xgtClient = XGTClient.getInstance(config)
     this.memoryMap = memoryMap
     this.reset()
-    this.myEmitter = new MyEmitter();
-
   }
   async scan(): Promise<void> {
     //  q:아직 작동중에 다시 데이터 취득 요청한다면?
@@ -60,7 +56,7 @@ export class SutechEquipment {
       }
     }
     this.isScanning = false
-    this.myEmitter.emit('scanEnd', this.memory)
+    this.emit('scanEnd', this.memory)
     this.endAt = new Date()
   }
   // f) 리셋 함수
@@ -83,11 +79,11 @@ export class SutechEquipment {
   async getMemory(): Promise<EquipmentScanResult> {
     const self = this
 
-    // 아직 스캔중이라면..?
-    if (this.isScanning) {
+    // 접속되었고, 아직 스캔중이라면..?
+    if (this.isScanning && this.xgtClient.status === 'CONNECTED') {
       // 기달림..
       await new Promise((resolve, reject) => {
-        self.myEmitter.once('scanEnd', (result: unknown) => {
+        self.once('scanEnd', (result: unknown) => {
           resolve(result)
         })
         // TODO: 타임아웃 처리
