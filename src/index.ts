@@ -22,5 +22,5 @@ console.log(env)
 setInterval(async () => {
   await sutechEquipment.scan()
   const scanResult = await sutechEquipment.getMemory()
-  influxClient.write(scanResult)
+  await influxClient.write(scanResult)
 }, REPEAT_INTERVAL)

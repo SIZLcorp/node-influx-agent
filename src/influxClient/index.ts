@@ -32,7 +32,7 @@ export class InfluxClient {
   }
 
   // 데이터 입력
-  write(inp: EquipmentScanResult): void {
+  async write(inp: EquipmentScanResult): Promise<void> {
     const data = this.convert(inp)
 
     const writeApi = this.influxInstance.getWriteApi(INFLUX_ORG, INFLUX_BUCKET, 'ns')
@@ -41,9 +41,8 @@ export class InfluxClient {
     const point1 = new Point('param_data')
       .tag('company', COMPANY_CODE)
       .tag('machine_code', MACHINE_CODE)
-
-    point1.intField('version', 1)
-    point1.stringField('manufacturer', 'sutech')
+      .intField('version', 1)
+      .stringField('manufacturer', 'sutech')
 
     if (data.press_spm !== null && data.press_spm !== undefined) {
       point1.floatField('press_spm', data.press_spm)
@@ -132,6 +131,7 @@ export class InfluxClient {
 
 
     writeApi.writePoint(point1)
+    await writeApi.flush()
   }
 
 }
