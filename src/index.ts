@@ -1,6 +1,6 @@
 const { INFLUX_URL, INFLUX_TOKEN, INFLUX_ORG, REPEAT_INTERVAL, EQUIPMENT_PORT, EQUIPMENT_HOST } = require('./env')
 import { MACHINE_CODE, COMPANY_CODE } from "./env"
-
+import * as env from "./env"
 import { InfluxClient } from "./influxClient"
 import { mappingSetting } from "./setting"
 import { SutechEquipment } from "./sutechEquipment"
@@ -17,13 +17,7 @@ const influxClient = new InfluxClient({
   org: INFLUX_ORG
 })
 
-console.log({
-  MACHINE_CODE,
-  COMPANY_CODE,
-  REPEAT_INTERVAL,
-  EQUIPMENT_PORT,
-  EQUIPMENT_HOST
-})
+console.log(env)
 
 setInterval(async () => {
   await sutechEquipment.scan()
