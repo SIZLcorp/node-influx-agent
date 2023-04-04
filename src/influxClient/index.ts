@@ -15,6 +15,19 @@ export class InfluxClient {
   convert(data: EquipmentScanResult): EquipmentScanResult {
     let result = data
     // true, false 로 받는것 0, 1 로 변환해야함
+    if (data.press_run_ready) {
+      data.press_run_ready = data.press_run_ready ? 1 : 0
+    }
+    if (data.press_run_ok) {
+      data.press_run_ok = data.press_run_ok ? 1 : 0
+    }
+    if (data.press_motor_state) {
+      data.press_motor_state = data.press_motor_state ? 1 : 0
+    }
+    if (data.press_run_state) {
+      data.press_run_state = data.press_run_state ? 1 : 0
+    }
+
     return result
   }
 
