@@ -1,3 +1,5 @@
+import * as dotenv from 'dotenv' // see https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
+dotenv.config()
 /** InfluxDB v2 URL */
 export const INFLUX_URL = process.env['INFLUX_URL'] || 'http://localhost:8086'
 /** InfluxDB authorization token */
@@ -13,3 +15,5 @@ export const EQUIPMENT_HOST = process.env['EQUIPMENT_HOST'] || '192.168.100.110'
 
 export const REPEAT_INTERVAL = process.env['REPEAT_INTERVAL'] || 500
 
+export const MACHINE_CODE = process.env['MACHINE_CODE'] || 'E1'
+export const COMPANY_CODE = process.env['COMPANY_CODE'] || 'C1'

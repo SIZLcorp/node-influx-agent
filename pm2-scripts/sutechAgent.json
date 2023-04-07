@@ -1,0 +1,20 @@
+{
+	"apps": [
+		{
+			"name": "01-Agent",
+			"script": "node dist",
+			"env": {
+				"EQUIPMENT_HOST": "192.168.100.111",
+				"MACHINE_CODE": "P001"
+			}
+		},
+		{
+			"name": "02-Agent",
+			"script": "node dist",
+			"env": {
+				"EQUIPMENT_HOST": "192.168.100.113",
+				"MACHINE_CODE": "P002"
+			}
+		}
+	]
+}

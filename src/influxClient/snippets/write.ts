@@ -2,10 +2,8 @@
 //////////////////////////////////////////
 // Shows how to use InfluxDB write API. //
 //////////////////////////////////////////
-import * as dotenv from 'dotenv' // see https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
-dotenv.config()
 import { InfluxDB, Point, HttpError } from '@influxdata/influxdb-client'
-import { INFLUX_URL, INFLUX_TOKEN, INFLUX_ORG, INFLUX_BUCKET } from '../env'
+import { INFLUX_URL, INFLUX_TOKEN, INFLUX_ORG, INFLUX_BUCKET } from '../../env'
 
 import { hostname } from 'node:os'
 

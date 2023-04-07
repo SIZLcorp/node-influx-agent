@@ -1,115 +1,137 @@
-#!./node_modules/.bin/esr
-/* eslint-disable @typescript-eslint/no-unused-vars */
-//////////////////////////////////////////
-// Shows how to use InfluxDB query API. //
-//////////////////////////////////////////
-import * as dotenv from 'dotenv' // see https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
-dotenv.config()
-import { InfluxDB, FluxTableMetaData } from '@influxdata/influxdb-client'
-import { INFLUX_URL, INFLUX_TOKEN, INFLUX_ORG } from '../env'
+import { InfluxClientConfig } from "InfluxClient";
+import { InfluxDB, Point, HttpError } from '@influxdata/influxdb-client'
+import { INFLUX_URL, INFLUX_TOKEN, INFLUX_ORG, INFLUX_BUCKET, COMPANY_CODE, MACHINE_CODE } from '../env'
+import { EquipmentScanResult } from "SutechEquipment";
 
-const queryApi = new InfluxDB({ url: INFLUX_URL, token: INFLUX_TOKEN }).getQueryApi(INFLUX_ORG)
-const fluxQuery =
-  `from(bucket:"4MN60H_pms") |> range(start: -1d, stop: now())
-  |> filter(fn: (r) => r["_measurement"] == "press_mon_data")
-  |> filter(fn: (r) => r["_field"] == "rd_left_160" or r["_field"] == "rd_left_161" or r["_field"] == "rd_left_162" or r["_field"] == "rd_left_163" or r["_field"] == "rd_left_164" or r["_field"] == "rd_left_165" or r["_field"] == "rd_left_166" or r["_field"] == "rd_left_167" or r["_field"] == "rd_left_168" or r["_field"] == "rd_left_169" or r["_field"] == "rd_left_170" or r["_field"] == "rd_left_171" or r["_field"] == "rd_left_172" or r["_field"] == "rd_left_173" or r["_field"] == "rd_left_174" or r["_field"] == "rd_left_175" or r["_field"] == "rd_left_176" or r["_field"] == "rd_left_177" or r["_field"] == "rd_left_178" or r["_field"] == "rd_left_179" or r["_field"] == "rd_left_180" or r["_field"] == "rd_left_181" or r["_field"] == "rd_left_182" or r["_field"] == "rd_left_183" or r["_field"] == "rd_left_184" or r["_field"] == "rd_left_185" or r["_field"] == "rd_left_186" or r["_field"] == "rd_left_187" or r["_field"] == "rd_left_188" or r["_field"] == "rd_left_189" or r["_field"] == "rd_left_190" or r["_field"] == "rd_left_191" or r["_field"] == "rd_left_192" or r["_field"] == "rd_left_193" or r["_field"] == "rd_left_194" or r["_field"] == "rd_left_195" or r["_field"] == "rd_left_196" or r["_field"] == "rd_left_197" or r["_field"] == "rd_left_198" or r["_field"] == "rd_left_199" or r["_field"] == "rd_left_200")
-  |> filter(fn: (r) => r["machine_code"] == "P1500050")`
-
-// There are more ways of how to receive results,
-// the essential ones are shown in functions below.
-// Execution of a particular function follows
-// its definition, comment/uncomment it at will.
-// See also rxjs-query.ts and queryWithParams.mjs .
-
-// Execute query and receive table metadata and table row values using async iterator.
-async function iterateRows() {
-  console.log('*** IterateRows ***')
-  for await (const { values, tableMeta } of queryApi.iterateRows(fluxQuery)) {
-    // the following line creates an object for each row
-    const o = tableMeta.toObject(values)
-    // console.log(JSON.stringify(o, null, 2))
-    console.log(
-      `${o._time} ${o._measurement} in '${o.location}' (${o.example}): ${o._field}=${o._value}`
-    )
-
-    // alternatively, you can get only a specific column value without
-    // the need to create an object for every row
-    // console.log(tableMeta.get(row, '_time'))
+export class InfluxClient {
+  influxConfig: InfluxClientConfig;
+  influxInstance: InfluxDB;
+  constructor(influxConfig: InfluxClientConfig) {
+    this.influxConfig = influxConfig;
+    this.influxInstance = new InfluxDB({ url: INFLUX_URL, token: INFLUX_TOKEN })
   }
-  console.log('\nIterateRows SUCCESS')
-}
-iterateRows().catch((error) => console.error('IterateRows ERROR', error))
 
-// Execute query and receive table metadata and rows in a result observer.
-function queryRows() {
-  console.log('*** QueryRows ***')
-  queryApi.queryRows(fluxQuery, {
-    next: (row: string[], tableMeta: FluxTableMetaData) => {
-      // the following line creates an object for each row
-      const o = tableMeta.toObject(row)
-      // console.log(JSON.stringify(o, null, 2))
-      console.log(
-        `${o._time} ${o._measurement} in '${o.location}' (${o.example}): ${o._field}=${o._value}`
-      )
 
-      // alternatively, you can get only a specific column value without
-      // the need to create an object for every row
-      // console.log(tableMeta.get(row, '_time'))
-    },
-    error: (error: Error) => {
-      console.error(error)
-      console.log('\nQueryRows ERROR')
-    },
-    complete: () => {
-      console.log('\nQueryRows SUCCESS')
-    },
-  })
-}
-queryRows()
+  convert(data: EquipmentScanResult): EquipmentScanResult {
+    let result = data
+    // true, false 로 받는것 0, 1 로 변환해야함
+    if (data.press_run_ready !== null && data.press_run_ready !== undefined) {
+      result.press_run_ready = data.press_run_ready ? 1 : 0
+    }
+    if (data.press_run_ok !== null && data.press_run_ok !== undefined) {
+      result.press_run_ok = data.press_run_ok ? 1 : 0
+    }
+    if (data.press_motor_state !== null && data.press_motor_state !== undefined) {
+      result.press_motor_state = data.press_motor_state ? 1 : 0
+    }
+    if (data.press_run_state !== null && data.press_run_state !== undefined) {
+      result.press_run_state = data.press_run_state ? 1 : 0
+    }
 
-// Execute query and collect result rows in a Promise.
-// Use with caution, it copies the whole stream of results into memory.
-async function collectRows() {
-  console.log('\n*** CollectRows ***')
-  const data = await queryApi.collectRows(
-    fluxQuery //, you can also specify a row mapper as a second argument
-  )
-  data.forEach((x) => console.log(JSON.stringify(x)))
-  console.log('\nCollect ROWS SUCCESS')
-}
-// collectRows().catch((error) => console.error('CollectRows ERROR', error))
-
-// Execute query and return the whole result as a string.
-// Use with caution, it copies the whole stream of results into memory.
-async function queryRaw() {
-  const result = await queryApi.queryRaw(fluxQuery)
-  console.log(result)
-  console.log('\nQueryRaw SUCCESS')
-}
-// queryRaw().catch((error) => console.error('QueryRaw ERROR', error))
-
-// Execute query and receive result CSV lines in an observer
-function queryLines() {
-  queryApi.queryLines(fluxQuery, {
-    next: (line: string) => {
-      console.log(line)
-    },
-    error: (error: Error) => {
-      console.error(error)
-      console.log('\nQueryLines ERROR')
-    },
-    complete: () => {
-      console.log('\nQueryLines SUCCESS')
-    },
-  })
-}
-// queryLines()
-
-// Execute query and receive result csv lines using async iterable
-async function iterateLines() {
-  for await (const line of queryApi.iterateLines(fluxQuery)) {
-    console.log(line)
+    return result
   }
-  console.log('\nIterateLines SUCCESS')
+
+  // 데이터 입력
+  async write(inp: EquipmentScanResult): Promise<void> {
+    const data = this.convert(inp)
+
+    const writeApi = this.influxInstance.getWriteApi(INFLUX_ORG, INFLUX_BUCKET, 'ns')
+    console.log("write", data);
+
+    const point1 = new Point('param_data')
+      .tag('company', COMPANY_CODE)
+      .tag('machine_code', MACHINE_CODE)
+      .intField('version', 1)
+      .stringField('manufacturer', 'sutech')
+
+    if (data.press_spm !== null && data.press_spm !== undefined) {
+      point1.floatField('press_spm', data.press_spm)
+    }
+    if (data.press_angle !== null && data.press_angle !== undefined) {
+      point1.floatField('press_angle', data.press_angle)
+    }
+    if (data.press_main_motor_current !== null && data.press_main_motor_current !== undefined) {
+      point1.floatField('press_main_motor_current', data.press_main_motor_current)
+    }
+    if (data.press_slide_motor_current !== null && data.press_slide_motor_current !== undefined) {
+      point1.floatField('press_slide_motor_current', data.press_slide_motor_current)
+    }
+    // 'press_inverter_spm'
+    if (data.press_inverter_spm !== null && data.press_inverter_spm !== undefined) {
+      point1.floatField('press_inverter_spm', data.press_inverter_spm)
+    }
+    // 'press_preset_counter'
+    if (data.press_preset_counter !== null && data.press_preset_counter !== undefined) {
+      point1.floatField('press_preset_counter', data.press_preset_counter)
+    }
+    // 'press_total_counter'
+    if (data.press_total_counter !== null && data.press_total_counter !== undefined) {
+      point1.floatField('press_total_counter', data.press_total_counter)
+    }
+    // 'press_whole_counter'
+    if (data.press_whole_counter !== null && data.press_whole_counter !== undefined) {
+      point1.floatField('press_whole_counter', data.press_whole_counter)
+    }
+    // 'press_preset_limit_counter'
+    if (data.press_preset_limit_counter !== null && data.press_preset_limit_counter !== undefined) {
+      point1.floatField('press_preset_limit_counter', data.press_preset_limit_counter)
+    }
+    // 'cycle_index'
+    if (data.cycle_index !== null && data.cycle_index !== undefined) {
+      point1.floatField('cycle_index', data.cycle_index)
+    }
+    // 'press_safety_one_cycle_stop_angle'
+    if (data.press_safety_one_cycle_stop_angle !== null && data.press_safety_one_cycle_stop_angle !== undefined) {
+      point1.floatField('press_safety_one_cycle_stop_angle', data.press_safety_one_cycle_stop_angle)
+    }
+    // 'press_safety_one_cycle_slip_angle'
+    if (data.press_safety_one_cycle_slip_angle !== null && data.press_safety_one_cycle_slip_angle !== undefined) {
+      point1.floatField('press_safety_one_cycle_slip_angle', data.press_safety_one_cycle_slip_angle)
+    }
+    // 'press_key_cam'
+    if (data.press_key_cam !== null && data.press_key_cam !== undefined) {
+      point1.floatField('press_key_cam', data.press_key_cam)
+    }
+    // 'press_run_ready'
+    if (data.press_run_ready !== null && data.press_run_ready !== undefined) {
+      point1.floatField('press_run_ready', data.press_run_ready)
+    }
+    // 'press_run_ok'
+    if (data.press_run_ok !== null && data.press_run_ok !== undefined) {
+      point1.floatField('press_run_ok', data.press_run_ok)
+    }
+    // 'press_motor_state'
+    if (data.press_motor_state !== null && data.press_motor_state !== undefined) {
+      point1.floatField('press_motor_state', data.press_motor_state)
+    }
+    // 'press_motor_vector'
+    if (data.press_motor_vector !== null && data.press_motor_vector !== undefined) {
+      point1.floatField('press_motor_vector', data.press_motor_vector)
+    }
+    // 'press_run_state'
+    if (data.press_run_state !== null && data.press_run_state !== undefined) {
+      point1.floatField('press_run_state', data.press_run_state)
+    }
+    // 'press_error_number'
+    if (data.press_error_number !== null && data.press_error_number !== undefined) {
+      point1.floatField('press_error_number', data.press_error_number)
+    }
+    // 'press_slide_top_position'
+    if (data.press_slide_top_position !== null && data.press_slide_top_position !== undefined) {
+      point1.floatField('press_slide_top_position', data.press_slide_top_position)
+    }
+    // 'press_operator_run_time'
+    if (data.press_operator_run_time !== null && data.press_operator_run_time !== undefined) {
+      point1.stringField('press_operator_run_time', data.press_operator_run_time)
+    }
+    // 'press_operator_stop_time'
+    if (data.press_operator_stop_time !== null && data.press_operator_stop_time !== undefined) {
+      point1.stringField('press_operator_stop_time', data.press_operator_stop_time)
+    }
+
+
+    writeApi.writePoint(point1)
+    await writeApi.flush()
+  }
+
 }
-// iterateLines().catch((error) => console.error('\nIterateLines ERROR', error))

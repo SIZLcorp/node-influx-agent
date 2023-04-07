@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
-    "target": "esnext",
+    "target": "es6",
     "module": "commonjs",
+    "sourceMap": true,
     "moduleResolution": "node",
     "noImplicitAny": true,
     "declaration": false,
@@ -10,17 +11,20 @@
       "./src/typings"
     ],
     "allowJs": true,
-    "noEmit": true,
     "isolatedModules": true,
     "strict": true,
     "noFallthroughCasesInSwitch": true,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
+    "outDir": "./dist"
   },
   "ts-node": {
     "files": true,
     "esm": true,
     "experimentalSpecifierResolution": "node"
-  }
+  },
+  "include": [
+    "./src/**/*"
+  ]
 }

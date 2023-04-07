@@ -23,6 +23,7 @@ export class XGTClient {
     // Gracefully.. 프로세스 종료 감지시 disconnect 요청함
     process.on('SIGINT', () => {
       self.disconnect()
+      process.exit()
     })
   }
   public static getInstance(config: XGTClientConfig) {
