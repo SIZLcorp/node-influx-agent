@@ -2,6 +2,34 @@ import { SutechConfigItem } from "./sutechEquipment";
 
 export const mappingSetting: SutechConfigItem[] = [
   {
+    "dataCode": "press_key_cam_off",
+    "plcAddress": "M75",
+    "bitIndex": 0,
+    "name": "키캠값",
+    "dataType": "B"
+  },
+  {
+    "dataCode": "press_key_cam_inching",
+    "plcAddress": "M75",
+    "bitIndex": 1,
+    "name": "키캠값",
+    "dataType": "B"
+  },
+  {
+    "dataCode": "press_key_cam_one_cycle",
+    "plcAddress": "M75",
+    "bitIndex": 2,
+    "name": "키캠값",
+    "dataType": "B"
+  },
+  {
+    "dataCode": "press_key_cam_continue",
+    "plcAddress": "M75",
+    "bitIndex": 3,
+    "name": "키캠값",
+    "dataType": "B"
+  },
+  {
     "dataCode": "press_spm",
     "plcAddress": "L58",
     "name": "분당 회전수(SPM)",
