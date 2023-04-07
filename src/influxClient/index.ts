@@ -28,7 +28,19 @@ export class InfluxClient {
       result.press_run_state = data.press_run_state ? 1 : 0
     }
 
+    data.press_whole_counter = this.mergeWord(data.press_whole_counter_lower || 0, data.press_whole_counter_upper || 0)
+
     return result
+  }
+
+  mergeWord(lower: number, upper: number): number {
+    const buf = Buffer.allocUnsafe(4);
+
+    buf.writeUInt16LE(lower, 0);
+    // Writing the value to the buffer from 4 offset
+    buf.writeUInt16LE(upper, 2);
+
+    return buf.readUInt32LE(0)
   }
 
   // 데이터 입력

@@ -66,13 +66,13 @@ export const mappingSetting: SutechConfigItem[] = [
     "dataType": "B"
   },
   {
-    "dataCode": "press_whole_counter",
+    "dataCode": "press_whole_counter_lower",
     "plcAddress": "C14",
     "name": "프레스 누적 카운트(lower)",
     "dataType": "B"
   },
   {
-    "dataCode": "press_whole_counter",
+    "dataCode": "press_whole_counter_upper",
     "plcAddress": "C15",
     "name": "프레스 누적 카운트(upper)",
     "dataType": "B"
