@@ -37,10 +37,10 @@ declare module "InfluxClient" {
     'press_safety_one_cycle_stop_angle' |
     'press_safety_one_cycle_slip_angle' |
     'press_key_cam' |
-      'press_key_cam_off' |
-      'press_key_cam_inching' |
-      'press_key_cam_one_cycle' |
-      'press_key_cam_continue' |
+    'press_key_cam_off' |
+    'press_key_cam_inching' |
+    'press_key_cam_one_cycle' |
+    'press_key_cam_continue' |
     'press_run_ready' |
     'press_run_ok' |
     'press_motor_state' |
