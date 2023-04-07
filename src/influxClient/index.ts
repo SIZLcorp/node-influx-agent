@@ -28,7 +28,7 @@ export class InfluxClient {
       result.press_run_state = data.press_run_state ? 1 : 0
     }
 
-    data.press_whole_counter = this.mergeWord(data.press_whole_counter_lower || 0, data.press_whole_counter_upper || 0)
+    result.press_whole_counter = this.mergeWord(data.press_whole_counter_lower || 0, data.press_whole_counter_upper || 0)
 
     return result
   }
