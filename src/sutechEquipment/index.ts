@@ -48,7 +48,7 @@ export class SutechEquipment extends EventEmitter {
 
       let parsedData: number | boolean | string = data
       if (item.bitIndex !== undefined) {
-        parsedData = data.toString(2).charAt(item.bitIndex) === '1'
+        parsedData = this.getBitFromUInt16LE(data, item.bitIndex)
       }
       this.memory = {
         ...this.memory,
@@ -59,6 +59,15 @@ export class SutechEquipment extends EventEmitter {
     this.emit('scanEnd', this.memory)
     this.endAt = new Date()
   }
+
+  getBitFromUInt16LE(data:number, bitIndex:number) : number{
+    const byteIndex = Math.floor(bitIndex/8)
+    const localBitIndex = bitIndex % 8
+    const buf = Buffer.alloc(2)
+    buf.writeUInt16LE(data, 0)
+    return (buf[byteIndex] >> localBitIndex) & 1
+  }
+
   // f) 리셋 함수
   reset(): void {
     this.memory = {
