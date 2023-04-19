@@ -55,13 +55,13 @@ export const mappingSetting: SutechConfigItem[] = [
   },
   {
     "dataCode": "press_preset_counter",
-    "plcAddress": "C12",
+    "plcAddress": "C10",
     "name": "프레스 프리셋 카운트",
     "dataType": "B"
   },
   {
     "dataCode": "press_total_counter",
-    "plcAddress": "C10",
+    "plcAddress": "C12",
     "name": "프레스 토탈 카운트",
     "dataType": "B"
   },
