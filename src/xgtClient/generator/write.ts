@@ -2,9 +2,6 @@ import { XGTProtocolAddressType, XGTDataType } from "XGTClient"
 import { setDataType } from "../util/setDataType"
 
 export default function writeData(address: XGTProtocolAddressType, dataType: XGTDataType, buf: Buffer) {
-  // console.log('buf->', buf)
-  // console.log(buf.length)
-
   const command = Buffer.from([0x58, 0x00])
   const dataTypeHEX = setDataType(dataType)
   const reserved = Buffer.from([0x00, 0x00])

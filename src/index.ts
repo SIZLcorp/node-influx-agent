@@ -3,7 +3,8 @@ import * as env from "./env"
 import { InfluxClient } from "./influxClient"
 import { mappingSetting } from "./setting"
 import { SutechEquipment } from "./sutechEquipment"
-
+import Debug from "debug"
+const debug = Debug("su-agent")
 
 const sutechEquipment = new SutechEquipment({
   port: EQUIPMENT_PORT,
@@ -16,7 +17,7 @@ const influxClient = new InfluxClient({
   org: INFLUX_ORG
 })
 
-console.log(env)
+debug(env)
 
 setInterval(async () => {
   await sutechEquipment.scan()

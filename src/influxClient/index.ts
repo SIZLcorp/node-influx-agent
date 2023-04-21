@@ -2,6 +2,8 @@ import { InfluxClientConfig } from "InfluxClient";
 import { InfluxDB, Point, HttpError } from '@influxdata/influxdb-client'
 import { INFLUX_URL, INFLUX_TOKEN, INFLUX_ORG, INFLUX_BUCKET, COMPANY_CODE, MACHINE_CODE } from '../env'
 import { EquipmentScanResult } from "SutechEquipment";
+import Debug from "debug"
+const debug = Debug("su-agent:influx")
 
 export class InfluxClient {
   influxConfig: InfluxClientConfig;
@@ -46,9 +48,9 @@ export class InfluxClient {
   // 데이터 입력
   async write(inp: EquipmentScanResult): Promise<void> {
     const data = this.convert(inp)
-
+    const writeDebug = debug.extend("write")
     const writeApi = this.influxInstance.getWriteApi(INFLUX_ORG, INFLUX_BUCKET, 'ns')
-    console.log("write", data);
+    writeDebug("write", data);
 
     const point1 = new Point('param_data')
       .tag('company', COMPANY_CODE)
