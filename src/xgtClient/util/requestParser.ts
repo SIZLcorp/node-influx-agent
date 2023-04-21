@@ -34,21 +34,20 @@ RESERVED2\t\t${printHEXPretty(reserved2)}`)
 
 
   // BODY
-
   const command = slicer.getSlice(buf, 2)
   const type = slicer.getSlice(buf, 2)
   const block = slicer.getSlice(buf, 2)
   const num = slicer.getSlice(buf, 2)
-  //   const value = slicer.getSlice(buf, 2)
-  //   const data_size = slicer.getSlice(buf, 2)
+  const data_size = slicer.getSlice(buf, 2)
   const data = buf.subarray(slicer.getPointer())
 
   debug(`====BODY====
 명령어\t\t\t${printHEXPretty(command)}
 데이터타입\t\t${printHEXPretty(type)}
 예약영역\t\t${printHEXPretty(block)}
-변수길이\t\t${printHEXPretty(num)}
-데이터\t\t\t${printHEXPretty(data)}\t${data}`)
+변수개수\t\t${printHEXPretty(num)}
+변수명길이\t\t${printHEXPretty(data_size)}
+데이터(변수)\t\t${printHEXPretty(data)}\t${data}`)
 }
 
 export function parseWriteRequest(buf: Buffer): void {
