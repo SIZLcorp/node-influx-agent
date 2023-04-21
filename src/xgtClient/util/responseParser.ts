@@ -50,7 +50,7 @@ RESERVED2\t\t${printHEXPretty(reserved2)}`)
 에러정보\t\t${printHEXPretty(value)}`)
   if (data_size) {
     console.warn(`데이터크기\t\t${printHEXPretty(data_size)} \t${data_size.readIntLE(0, data_size.length)}
-데이터\t\t\t${printHEXPretty(data)} \t${data.readIntLE(0, data.length)}`)
+데이터\t\t\t${printHEXPretty(data)} \t${data.readUintLE(0, data.length)}`)
   }
   return {
     header: {
@@ -73,7 +73,7 @@ RESERVED2\t\t${printHEXPretty(reserved2)}`)
         data_size: data_size.readIntLE(0, data_size.length),
       }),
       ...(data && {
-        data: data.readIntLE(0, data.length)
+        data: data.readUintLE(0, data.length)
       })
     }
   }
