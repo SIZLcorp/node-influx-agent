@@ -9,12 +9,15 @@ export default function readData(address: XGTProtocolAddressType, dataType: XGTD
   const block = Buffer.from([0x01, 0x00])
   const addr = Buffer.from(address, 'utf8')
   const addrLength = Buffer.from([addr.length, 0x00])
+  const data_size = Buffer.from([0x02, 0x00])
+
   const totalLength = command.length +
     dataTypeHEX.length +
     reserved.length +
     block.length +
     addrLength.length +
-    addr.length
+    addr.length +
+    data_size.length
 
   return Buffer.concat([
     command,
@@ -22,7 +25,8 @@ export default function readData(address: XGTProtocolAddressType, dataType: XGTD
     reserved,
     block,
     addrLength,
-    addr
+    addr,
+    data_size
   ], totalLength)
 }
 
