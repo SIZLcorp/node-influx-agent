@@ -6,12 +6,13 @@
 
 import { XGTReadResponse } from 'XGTClient'
 import { printHEXPretty, BufferSlicer } from '.'
+import Debug from "debug"
+const debug = Debug("su-agent:xgtClient:responseParser")
 
 export function parseReadResponse(buf: Buffer): XGTReadResponse {
-  console.log('read response')
   const slicer = new BufferSlicer()
 
-  console.warn(`<< PARSED RESPONSE`)
+  debug(`<< PARSED RESPONSE`)
   // HEADER
   const company_id: Buffer = slicer.getSlice(buf, 10)
   const plc_info: Buffer = slicer.getSlice(buf, 2)
@@ -22,7 +23,7 @@ export function parseReadResponse(buf: Buffer): XGTReadResponse {
   const fenetPos: Buffer = slicer.getSlice(buf, 1)
   const reserved2: Buffer = slicer.getSlice(buf, 1)
 
-  console.warn(`====HEADER====
+  debug(`====HEADER====
 COMPANY_ID\t\t${printHEXPretty(company_id)}\t ${company_id}
 PLC_INFO\t\t${printHEXPretty(plc_info)}
 CPU_INFO\t\t${printHEXPretty(cpu_info)}
@@ -42,14 +43,14 @@ RESERVED2\t\t${printHEXPretty(reserved2)}`)
   const data_size: Buffer = slicer.getSlice(buf, 2)
   const data: Buffer = buf.subarray(slicer.getPointer())
 
-  console.warn(`====BODY====
+  debug(`====BODY====
 명령어\t\t\t${printHEXPretty(command)}
 데이터타입\t\t${printHEXPretty(type)}
 예약영역\t\t${printHEXPretty(block)}
 에러상태\t\t${printHEXPretty(error_status)}
 에러정보\t\t${printHEXPretty(value)}`)
   if (data_size) {
-    console.warn(`데이터크기\t\t${printHEXPretty(data_size)} \t${data_size.readIntLE(0, data_size.length)}
+    debug(`데이터크기\t\t${printHEXPretty(data_size)} \t${data_size.readIntLE(0, data_size.length)}
 데이터\t\t\t${printHEXPretty(data)} \t${data.readIntLE(0, data.length)}`)
   }
   return {
@@ -80,11 +81,8 @@ RESERVED2\t\t${printHEXPretty(reserved2)}`)
 }
 
 export function parseWriteResponse(buf: Buffer): void {
-  console.log('write response')
   const slicer = new BufferSlicer()
-
-
-  console.warn(`<< PARSED RESPONSE`)
+  debug(`<< PARSED RESPONSE`)
   // HEADER
   const company_id = slicer.getSlice(buf, 10)
   const plc_info = slicer.getSlice(buf, 2)
@@ -95,7 +93,7 @@ export function parseWriteResponse(buf: Buffer): void {
   const fenetPos = slicer.getSlice(buf, 1)
   const reserved2 = slicer.getSlice(buf, 1)
 
-  console.warn(`====HEADER====
+  debug(`====HEADER====
 COMPANY_ID\t\t${printHEXPretty(company_id)}\t ${company_id}
 PLC_INFO\t\t${printHEXPretty(plc_info)}
 CPU_INFO\t\t${printHEXPretty(cpu_info)}
@@ -114,7 +112,7 @@ RESERVED2\t\t${printHEXPretty(reserved2)}`)
   const value = slicer.getSlice(buf, 2)
 
 
-  console.warn(`====BODY====
+  debug(`====BODY====
 명령어\t\t\t${printHEXPretty(command)}
 데이터타입\t\t${printHEXPretty(type)}
 예약영역\t\t${printHEXPretty(block)}

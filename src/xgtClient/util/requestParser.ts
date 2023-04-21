@@ -5,11 +5,13 @@
  * */
 
 import { printHEXPretty, BufferSlicer } from '.'
+import Debug from "debug"
+const debug = Debug("su-agent:xgtClient:requestParser")
 
 export function parseReadRequest(buf: Buffer): void {
   const slicer = new BufferSlicer()
 
-  console.warn(`>> PARSED REQUEST`)
+  debug(`>> PARSED REQUEST`)
 
   const company_id = slicer.getSlice(buf, 10)
   const plc_info = slicer.getSlice(buf, 2)
@@ -20,7 +22,7 @@ export function parseReadRequest(buf: Buffer): void {
   const fenetPos = slicer.getSlice(buf, 1)
   const reserved2 = slicer.getSlice(buf, 1)
 
-  console.warn(`====HEADER====
+  debug(`====HEADER====
 COMPANY_ID\t\t${printHEXPretty(company_id)}\t ${company_id}
 PLC_INFO\t\t${printHEXPretty(plc_info)}
 CPU_INFO\t\t${printHEXPretty(cpu_info)}
@@ -41,7 +43,7 @@ RESERVED2\t\t${printHEXPretty(reserved2)}`)
   //   const data_size = slicer.getSlice(buf, 2)
   const data = buf.subarray(slicer.getPointer())
 
-  console.warn(`====BODY====
+  debug(`====BODY====
 명령어\t\t\t${printHEXPretty(command)}
 데이터타입\t\t${printHEXPretty(type)}
 예약영역\t\t${printHEXPretty(block)}
@@ -53,7 +55,7 @@ export function parseWriteRequest(buf: Buffer): void {
   const slicer = new BufferSlicer()
 
 
-  console.warn(`>> PARSED REQUEST`)
+  debug(`>> PARSED REQUEST`)
 
   const company_id = slicer.getSlice(buf, 10)
   const plc_info = slicer.getSlice(buf, 2)
@@ -64,7 +66,7 @@ export function parseWriteRequest(buf: Buffer): void {
   const fenetPos = slicer.getSlice(buf, 1)
   const reserved2 = slicer.getSlice(buf, 1)
 
-  console.warn(`====HEADER====
+  debug(`====HEADER====
 COMPANY_ID\t\t${printHEXPretty(company_id)}\t ${company_id}
 PLC_INFO\t\t${printHEXPretty(plc_info)}
 CPU_INFO\t\t${printHEXPretty(cpu_info)}
@@ -88,7 +90,7 @@ RESERVED2\t\t${printHEXPretty(reserved2)}`)
   //   const data_size = slicer.getSlice(buf, 2)
   const data = buf.subarray(slicer.getPointer())
 
-  console.warn(`====BODY====
+  debug(`====BODY====
 명령어\t\t\t${printHEXPretty(command)}
 데이터타입\t\t${printHEXPretty(type)}
 예약영역\t\t${printHEXPretty(block)}

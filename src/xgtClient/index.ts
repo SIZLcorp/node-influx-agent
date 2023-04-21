@@ -7,7 +7,8 @@ import { parseReadRequest } from './util/requestParser'
 import { parseReadResponse } from './util/responseParser'
 import generateHeader from './generator/header'
 import generateReadData from './generator/read'
-
+import Debug from "debug"
+const debug = Debug("su-agent:xgtClient")
 
 type SocketStatus = 'CONNECTED' | 'DISCONNECTED' | 'ERROR' | 'CONNECTING'
 export class XGTClient {
@@ -42,18 +43,18 @@ export class XGTClient {
     const socket = net.createConnection(this.config)
     this.socket = socket
     this.status = 'CONNECTING'
-    console.log('소켓 접속', this.config)
+    debug('소켓 접속', this.config)
 
     return new Promise((resolve, reject) => {
       socket.once('connect', () => {
         self.status = 'CONNECTED'
-        console.log('소켓 접속됨')
+        debug('소켓 접속됨')
 
         resolve(socket)
       })
       socket.once("error", (err) => {
         self.status = 'ERROR'
-        console.log('소켓 에러', err)
+        debug('소켓 에러', err)
         self.disconnect()
         reject(err)
       })
@@ -83,7 +84,7 @@ export class XGTClient {
     let total_length = temp.length + header.length
     let reqData = Buffer.concat([header, temp], total_length)
 
-    // console.log(reqData)
+    // debug(reqData)
     return this.request_data(reqData)
   }
 
@@ -95,12 +96,12 @@ export class XGTClient {
       await this.connect()
     }
 
-    console.log('[server] request from client: \n', printHEXPretty(reqData))
+    debug('[server] request from client: \n', printHEXPretty(reqData))
     parseReadRequest(reqData)
 
     return new Promise((resolve, reject) => {
       self.socket!.once('data', serverData => {
-        console.log(`[client] received data from server: 
+        debug(`[client] received data from server: 
       ${printHEXPretty(serverData)}`)
         const parsedResponse = parseReadResponse(serverData)
         //TODO: 값 해석해서 결과만 돌려줘야함
