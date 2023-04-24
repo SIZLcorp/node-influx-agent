@@ -8,9 +8,12 @@ declare module "SutechEquipment" {
     'press_inverter_spm'?: number, // 인버터
     'press_preset_counter'?: number, // 프리셋 카운터(셋팅 카운터)
     'press_total_counter'?: number, // 전원 켜진 이후 토탈 카운터
-    'press_whole_counter_lower'?: number, // 기계 전체 카운터(lower word - 2bytes LE)
-    'press_whole_counter_upper'?: number, // 기계 전체 카운터(upper word - 2bytes LE)
-    'press_whole_counter'?: number, // 기계 전체 카운터(4bytes)
+    'press_whole_counter_1'?: number, // 기계 전체 카운터(lower word - 2bytes LE)
+    'press_whole_counter_2'?: number, // 기계 전체 카운터(upper word - 2bytes LE)
+    'press_whole_counter_3'?: number, // 기계 전체 카운터(lower word - 2bytes LE)
+    'press_whole_counter_4'?: number, // 기계 전체 카운터(upper word - 2bytes LE)
+    'press_whole_counter_5'?: number, // 기계 전체 카운터(lower word - 2bytes LE)
+    'press_whole_counter'?: bigint, // 기계 전체 카운터(4bytes)
     'press_preset_limit_counter'?: number, // 셋팅 최대 카운터
     'cycle_index'?: number, // 행정 인덱스
     'press_safety_one_cycle_stop_angle'?: number, // 클러치 정지 각도, f

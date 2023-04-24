@@ -1,8 +1,9 @@
-import { InfluxClientConfig } from "InfluxClient";
-import { InfluxDB, Point, HttpError } from '@influxdata/influxdb-client'
-import { INFLUX_URL, INFLUX_TOKEN, INFLUX_ORG, INFLUX_BUCKET, COMPANY_CODE, MACHINE_CODE } from '../env'
-import { EquipmentScanResult } from "SutechEquipment";
+import {InfluxClientConfig} from "InfluxClient";
+import {InfluxDB, Point} from '@influxdata/influxdb-client'
+import {COMPANY_CODE, INFLUX_BUCKET, INFLUX_ORG, INFLUX_TOKEN, INFLUX_URL, MACHINE_CODE} from '../env'
+import {EquipmentScanResult} from "SutechEquipment";
 import Debug from "debug"
+
 const debug = Debug("su-agent:influx")
 
 export class InfluxClient {
@@ -30,19 +31,29 @@ export class InfluxClient {
       result.press_run_state = data.press_run_state ? 1 : 0
     }
 
-    result.press_whole_counter = this.mergeWord(data.press_whole_counter_lower || 0, data.press_whole_counter_upper || 0)
-
+    result.press_whole_counter = this.mergeWord(data.press_whole_counter_1 || 0, data.press_whole_counter_2 || 0,
+        data.press_whole_counter_3 || 0,data.press_whole_counter_4 || 0,data.press_whole_counter_5 || 0)
     return result
   }
 
-  mergeWord(lower: number, upper: number): number {
-    const buf = Buffer.allocUnsafe(4);
+  mergeWord(first: number, second: number, third: number, fourth: number, last: number): bigint {
+    const buf = Buffer.allocUnsafe(10);
 
-    buf.writeUInt16LE(lower, 0);
+    buf.writeUInt16LE(first, 0);
     // Writing the value to the buffer from 4 offset
-    buf.writeUInt16LE(upper, 2);
+    buf.writeUInt16LE(second, 2);
+    buf.writeUInt16LE(third, 4);
+    buf.writeUInt16LE(fourth, 6);
+    buf.writeUInt16LE(last, 8);
 
-    return buf.readUInt32LE(0)
+
+    const low = buf.readUInt32LE(0); // Read the low 32 bits
+    const mid = buf.readUInt32LE(4); // Read the middle 32 bits
+    const high = buf.readUInt16LE(8); // Read the high 16 bits
+
+
+     // Combine the three integers to get the final 80-bit value
+    return BigInt(low) + (BigInt(mid) << BigInt(32)) + (BigInt(high) << BigInt(64))
   }
 
   // 데이터 입력
@@ -52,7 +63,7 @@ export class InfluxClient {
     const writeApi = this.influxInstance.getWriteApi(INFLUX_ORG, INFLUX_BUCKET, 'ns')
     writeDebug("write", data);
 
-    const point1 = new Point('param_data')
+    const point1 = new Point('press_data')
       .tag('company', COMPANY_CODE)
       .tag('machine_code', MACHINE_CODE)
       .intField('version', 1)
