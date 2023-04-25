@@ -1,8 +1,9 @@
-import { InfluxClientConfig } from "InfluxClient";
-import { InfluxDB, Point, HttpError } from '@influxdata/influxdb-client'
-import { INFLUX_URL, INFLUX_TOKEN, INFLUX_ORG, INFLUX_BUCKET, COMPANY_CODE, MACHINE_CODE } from '../env'
-import { EquipmentScanResult } from "SutechEquipment";
+import {InfluxClientConfig} from "InfluxClient";
+import {InfluxDB, Point} from '@influxdata/influxdb-client'
+import {COMPANY_CODE, INFLUX_BUCKET, INFLUX_ORG, INFLUX_TOKEN, INFLUX_URL, MACHINE_CODE} from '../env'
+import {EquipmentScanResult} from "SutechEquipment";
 import Debug from "debug"
+
 const debug = Debug("su-agent:influx")
 
 export class InfluxClient {
@@ -30,19 +31,20 @@ export class InfluxClient {
       result.press_run_state = data.press_run_state ? 1 : 0
     }
 
-    result.press_whole_counter = this.mergeWord(data.press_whole_counter_lower || 0, data.press_whole_counter_upper || 0)
-
+    result.press_whole_counter = this.mergeWord(data.press_whole_counter_1 || 0, data.press_whole_counter_2 || 0,
+        data.press_whole_counter_3 || 0,data.press_whole_counter_4 || 0)
     return result
   }
 
-  mergeWord(lower: number, upper: number): number {
-    const buf = Buffer.allocUnsafe(4);
+  mergeWord(first: number, second: number, third: number, last: number): bigint {
+    const buf = Buffer.allocUnsafe(8);
 
-    buf.writeUInt16LE(lower, 0);
-    // Writing the value to the buffer from 4 offset
-    buf.writeUInt16LE(upper, 2);
+    buf.writeUint16LE(first, 0);
+    buf.writeUInt16LE(second, 2);
+    buf.writeUInt16LE(third, 4);
+    buf.writeUInt16LE(last, 6);
 
-    return buf.readUInt32LE(0)
+    return buf.readBigUInt64LE(0)
   }
 
   // 데이터 입력
@@ -52,7 +54,7 @@ export class InfluxClient {
     const writeApi = this.influxInstance.getWriteApi(INFLUX_ORG, INFLUX_BUCKET, 'ns')
     writeDebug("write", data);
 
-    const point1 = new Point('param_data')
+    const point1 = new Point('press_data')
       .tag('company', COMPANY_CODE)
       .tag('machine_code', MACHINE_CODE)
       .intField('version', 1)
