@@ -90,12 +90,6 @@ export const mappingSetting: SutechConfigItem[] = [
     "dataType": "B"
   },
   {
-    "dataCode": "press_whole_counter_5",
-    "plcAddress": "C18",
-    "name": "프레스 누적 카운트(upper)",
-    "dataType": "B"
-  },
-  {
     "dataCode": "press_preset_limit_counter",
     "plcAddress": "D4020",
     "name": "프레스 프리셋 리밋",

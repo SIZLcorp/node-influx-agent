@@ -32,28 +32,19 @@ export class InfluxClient {
     }
 
     result.press_whole_counter = this.mergeWord(data.press_whole_counter_1 || 0, data.press_whole_counter_2 || 0,
-        data.press_whole_counter_3 || 0,data.press_whole_counter_4 || 0,data.press_whole_counter_5 || 0)
+        data.press_whole_counter_3 || 0,data.press_whole_counter_4 || 0)
     return result
   }
 
-  mergeWord(first: number, second: number, third: number, fourth: number, last: number): bigint {
-    const buf = Buffer.allocUnsafe(10);
+  mergeWord(first: number, second: number, third: number, last: number): bigint {
+    const buf = Buffer.allocUnsafe(8);
 
-    buf.writeUInt16LE(first, 0);
-    // Writing the value to the buffer from 4 offset
+    buf.writeUint16LE(first, 0);
     buf.writeUInt16LE(second, 2);
     buf.writeUInt16LE(third, 4);
-    buf.writeUInt16LE(fourth, 6);
-    buf.writeUInt16LE(last, 8);
+    buf.writeUInt16LE(last, 6);
 
-
-    const low = buf.readUInt32LE(0); // Read the low 32 bits
-    const mid = buf.readUInt32LE(4); // Read the middle 32 bits
-    const high = buf.readUInt16LE(8); // Read the high 16 bits
-
-
-     // Combine the three integers to get the final 80-bit value
-    return BigInt(low) + (BigInt(mid) << BigInt(32)) + (BigInt(high) << BigInt(64))
+    return buf.readBigUInt64LE(0)
   }
 
   // 데이터 입력

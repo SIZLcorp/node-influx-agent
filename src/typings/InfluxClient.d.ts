@@ -28,7 +28,6 @@ declare module "InfluxClient" {
     'press_whole_counter_2' |
     'press_whole_counter_3' |
     'press_whole_counter_4' |
-    'press_whole_counter_5' |
     'press_preset_limit_counter' |
     'cycle_index' |
     'press_temperature_value_1' |

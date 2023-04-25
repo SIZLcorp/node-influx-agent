@@ -12,7 +12,6 @@ declare module "SutechEquipment" {
     'press_whole_counter_2'?: number, // 기계 전체 카운터(upper word - 2bytes LE)
     'press_whole_counter_3'?: number, // 기계 전체 카운터(lower word - 2bytes LE)
     'press_whole_counter_4'?: number, // 기계 전체 카운터(upper word - 2bytes LE)
-    'press_whole_counter_5'?: number, // 기계 전체 카운터(lower word - 2bytes LE)
     'press_whole_counter'?: bigint, // 기계 전체 카운터(4bytes)
     'press_preset_limit_counter'?: number, // 셋팅 최대 카운터
     'cycle_index'?: number, // 행정 인덱스
