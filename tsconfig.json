@@ -3,9 +3,9 @@
     "target": "es6",
     "module": "commonjs",
     "sourceMap": true,
-    "moduleResolution": "node",
+    "moduleResolution": "nodenext",
     "noImplicitAny": true,
-    "declaration": false,
+    "declaration": true,
     "typeRoots": [
       "./node_modules/@types",
       "./src/typings"
