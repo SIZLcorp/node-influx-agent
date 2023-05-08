@@ -36,6 +36,13 @@ ToBe:
 > npm i -g pm2
 ```
 
+# 필수!! 윈도우에서 빌드시
+```bash
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
+```
+를 수행해서 사용자에게 스크립트 실행 권한을 줘야한다.
+
+
 ## PM2 이용해서 띄우는 방법
 ```bash
 > npm run build
