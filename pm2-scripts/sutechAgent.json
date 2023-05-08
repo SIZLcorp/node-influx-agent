@@ -1,21 +1,69 @@
 {
 	"apps": [
 		{
-			"name": "01-Agent",
-			"script": "node dist",
+			"name": "Agent09",
+			"script": "node",
+            "args": "dist",
 			"env": {
 				"DEBUG": "su-agent",
-				"EQUIPMENT_HOST": "192.168.100.111",
-				"MACHINE_CODE": "P001"
+				"EQUIPMENT_HOST": "192.168.0.157",
+				"EQUIPMENT_DESCRIPTION": "참신150",
+				"MACHINE_CODE": "202032"
 			}
 		},
 		{
-			"name": "02-Agent",
-			"script": "node dist",
+			"name": "Agent08",
+			"script": "node",
+            "args": "dist",
 			"env": {
 				"DEBUG": "su-agent",
-				"EQUIPMENT_HOST": "192.168.100.113",
-				"MACHINE_CODE": "P002"
+				"EQUIPMENT_HOST": "192.168.0.156",
+				"EQUIPMENT_DESCRIPTION": "화일200",
+				"MACHINE_CODE": "2006053290"
+			}
+		},
+		{
+			"name": "Agent07",
+			"script": "node",
+            "args": "dist",
+			"env": {
+				"DEBUG": "su-agent",
+				"EQUIPMENT_HOST": "192.168.0.155",
+				"EQUIPMENT_DESCRIPTION": "국일160D",
+				"MACHINE_CODE": "D54C021"
+			}
+		},
+		{
+			"name": "Agent06",
+			"script": "node",
+            "args": "dist",
+			"env": {
+				"DEBUG": "su-agent",
+				"EQUIPMENT_HOST": "192.168.0.154",
+				"EQUIPMENT_DESCRIPTION": "화일160",
+				"MACHINE_CODE": "2016016174"
+			}
+		},
+		{
+			"name": "Agent05",
+			"script": "node",
+            "args": "dist",
+			"env": {
+				"DEBUG": "su-agent",
+				"EQUIPMENT_HOST": "192.168.0.153",
+				"EQUIPMENT_DESCRIPTION": "한일HKCP110",
+				"MACHINE_CODE": "2020026"
+			}
+		},
+		{
+			"name": "Agent04",
+			"script": "node",
+            "args": "dist",
+			"env": {
+				"DEBUG": "su-agent",
+				"EQUIPMENT_HOST": "192.168.0.152",
+				"EQUIPMENT_DESCRIPTION": "국일PCA110N",
+				"MACHINE_CODE": "B42J352"
 			}
 		}
 	]
