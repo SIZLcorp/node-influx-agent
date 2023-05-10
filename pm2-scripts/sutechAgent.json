@@ -65,6 +65,28 @@
 				"EQUIPMENT_DESCRIPTION": "국일PCA110N",
 				"MACHINE_CODE": "B42J352"
 			}
+		},
+		{
+			"name": "Agent02",
+			"script": "node",
+            "args": "dist",
+			"env": {
+				"DEBUG": "su-agent",
+				"EQUIPMENT_HOST": "192.168.0.151",
+				"EQUIPMENT_DESCRIPTION": "쌍용CS110",
+				"MACHINE_CODE": "200606"
+			}
+		},
+		{
+			"name": "Agent01",
+			"script": "node",
+            "args": "dist",
+			"env": {
+				"DEBUG": "su-agent",
+				"EQUIPMENT_HOST": "192.168.0.150",
+				"EQUIPMENT_DESCRIPTION": "HIM60",
+				"MACHINE_CODE": "2012035410"
+			}
 		}
 	]
 }
