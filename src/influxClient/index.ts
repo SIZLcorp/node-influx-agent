@@ -30,6 +30,13 @@ export class InfluxClient {
     if (data.press_run_state !== null && data.press_run_state !== undefined) {
       result.press_run_state = data.press_run_state ? 1 : 0
     }
+    if (data.press_operator_run_time !== null && data.press_operator_run_time !== undefined) {
+      result.press_operator_run_time = this.converSecondToHms(data.press_operator_run_time)
+    }
+
+    if (data.press_operator_stop_time !== null && data.press_operator_stop_time !== undefined) {
+      result.press_operator_stop_time = this.converSecondToHms(data.press_operator_stop_time)
+    }
 
     result.press_whole_counter = this.mergeWord(data.press_whole_counter_1 || 0, data.press_whole_counter_2 || 0,
         data.press_whole_counter_3 || 0,data.press_whole_counter_4 || 0)
@@ -45,6 +52,13 @@ export class InfluxClient {
     buf.writeUInt16LE(last, 6);
 
     return buf.readBigUInt64LE(0)
+  }
+
+  converSecondToHms(second:string): string {
+    const seconds = parseInt(second);
+    const [mins, secs] = [Math.floor(seconds / 60), seconds % 60];
+    const [hrs, mins2] = [Math.floor(mins / 60), mins % 60];
+    return `${hrs.toString().padStart(2, '0')}:${mins2.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   }
 
   // 데이터 입력
