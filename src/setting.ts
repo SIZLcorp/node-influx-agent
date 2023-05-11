@@ -2,28 +2,28 @@ import { SutechConfigItem } from "./sutechEquipment";
 
 export const mappingSetting: SutechConfigItem[] = [
   {
-    "dataCode": "press_key_cam_off",
+    "dataCode": "press_key_cam_inching",
     "plcAddress": "M75",
     "bitIndex": 0,
     "name": "키캠값",
     "dataType": "B"
   },
   {
-    "dataCode": "press_key_cam_inching",
+    "dataCode": "press_key_cam_one_cycle",
     "plcAddress": "M75",
     "bitIndex": 1,
     "name": "키캠값",
     "dataType": "B"
   },
   {
-    "dataCode": "press_key_cam_one_cycle",
+    "dataCode": "press_key_cam_continue",
     "plcAddress": "M75",
     "bitIndex": 2,
     "name": "키캠값",
     "dataType": "B"
   },
   {
-    "dataCode": "press_key_cam_continue",
+    "dataCode": "press_key_cam_slide",
     "plcAddress": "M75",
     "bitIndex": 3,
     "name": "키캠값",
@@ -99,13 +99,6 @@ export const mappingSetting: SutechConfigItem[] = [
     "dataCode": "press_safety_one_cycle_slip_angle",
     "plcAddress": "L33",
     "name": "크랭크 슬립각",
-    "dataType": "B"
-  },
-  {
-    "dataCode": "press_key_cam",
-    "plcAddress": "M75",
-    // TODO: 별도 Parser가 필요함 제스텍과 형식 맞추기 위해
-    "name": "키캠값",
     "dataType": "B"
   },
   {
