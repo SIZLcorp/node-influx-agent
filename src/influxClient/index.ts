@@ -31,11 +31,11 @@ export class InfluxClient {
       result.press_run_state = data.press_run_state ? 1 : 0
     }
     if (data.press_operator_run_time !== null && data.press_operator_run_time !== undefined) {
-      result.press_operator_run_time = this.converSecondToHms(data.press_operator_run_time)
+      result.press_operator_run_time = this.convertSecondToHms(data.press_operator_run_time)
     }
 
     if (data.press_operator_stop_time !== null && data.press_operator_stop_time !== undefined) {
-      result.press_operator_stop_time = this.converSecondToHms(data.press_operator_stop_time)
+      result.press_operator_stop_time = this.convertSecondToHms(data.press_operator_stop_time)
     }
 
     result.press_whole_counter = this.mergeWord(data.press_whole_counter_1 || 0, data.press_whole_counter_2 || 0,
@@ -54,7 +54,7 @@ export class InfluxClient {
     return buf.readBigUInt64LE(0)
   }
 
-  converSecondToHms(second:string): string {
+  convertSecondToHms(second:string): string {
     const seconds = parseInt(second);
     const [mins, secs] = [Math.floor(seconds / 60), seconds % 60];
     const [hrs, mins2] = [Math.floor(mins / 60), mins % 60];
