@@ -17,6 +17,10 @@ declare module "SutechEquipment" {
     'cycle_index'?: number, // 행정 인덱스
     'press_safety_one_cycle_stop_angle'?: number, // 클러치 정지 각도, f
     'press_safety_one_cycle_slip_angle'?: number, // 클러치 밀림 각도, f
+    'press_key_cam_inching'?: number, // 키캠 상태
+    'press_key_cam_one_cycle'?: number, // 키캠 상태
+    'press_key_cam_continue'?: number, // 키캠 상태
+    'press_key_cam_slide'?: number, // 키캠 상태
     'press_key_cam'?: number, // 키캠 상태
     'press_run_ready'?: number, // 운전 준비 완료
     'press_run_ok'?: number, // 가동 준비 완료
