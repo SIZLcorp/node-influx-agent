@@ -33,11 +33,12 @@ export class InfluxClient {
     if (data.press_operator_run_time !== null && data.press_operator_run_time !== undefined) {
       result.press_operator_run_time = this.convertSecondToHms(data.press_operator_run_time)
     }
-
     if (data.press_operator_stop_time !== null && data.press_operator_stop_time !== undefined) {
       result.press_operator_stop_time = this.convertSecondToHms(data.press_operator_stop_time)
     }
 
+    result.press_key_cam = this.getKeyCam(data.press_key_cam_inching || 0, data.press_key_cam_one_cycle || 0,
+        data.press_key_cam_continue || 0, data.press_key_cam_slide || 0)
     result.press_whole_counter = this.mergeWord(data.press_whole_counter_1 || 0, data.press_whole_counter_2 || 0,
         data.press_whole_counter_3 || 0,data.press_whole_counter_4 || 0)
     return result
@@ -61,12 +62,24 @@ export class InfluxClient {
     return `${hrs.toString().padStart(2, '0')}:${mins2.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   }
 
+  getKeyCam(inching: number, oneCycle: number, camContinue: number, slide: number) {
+    if (inching == 1)
+      return 1;
+    if (oneCycle == 1)
+      return 2;
+    if (camContinue == 1)
+      return 3;
+    if (slide == 1)
+      return 4;
+    return 0;
+  }
+
   // 데이터 입력
   async write(inp: EquipmentScanResult): Promise<void> {
     const data = this.convert(inp)
     const writeDebug = debug.extend("write")
     const writeApi = this.influxInstance.getWriteApi(INFLUX_ORG, INFLUX_BUCKET, 'ns')
-    writeDebug("write", data);
+    // writeDebug("write", data);
 
     const point1 = new Point('press_data')
       .tag('company', COMPANY_CODE)
@@ -158,7 +171,7 @@ export class InfluxClient {
     if (data.press_operator_stop_time !== null && data.press_operator_stop_time !== undefined) {
       point1.stringField('press_operator_stop_time', data.press_operator_stop_time)
     }
-
+    writeDebug("write", point1);
 
     writeApi.writePoint(point1)
     await writeApi.flush()
