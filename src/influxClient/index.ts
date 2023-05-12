@@ -37,6 +37,7 @@ export class InfluxClient {
       result.press_operator_stop_time = this.convertSecondToHms(data.press_operator_stop_time)
     }
 
+    result.press_error_number = this.parseErrorCode(data.press_error_number || 0)
     result.press_key_cam = this.getKeyCam(data.press_key_cam_inching || 0, data.press_key_cam_one_cycle || 0,
         data.press_key_cam_continue || 0, data.press_key_cam_slide || 0)
     result.press_whole_counter = this.mergeWord(data.press_whole_counter_1 || 0, data.press_whole_counter_2 || 0,
@@ -72,6 +73,12 @@ export class InfluxClient {
     if (slide == 1)
       return 4;
     return 0;
+  }
+
+  parseErrorCode(errorCode: number) {
+    if (errorCode == 0)
+      return 0;
+    return 500 + errorCode;
   }
 
   // 데이터 입력
