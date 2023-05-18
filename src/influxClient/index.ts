@@ -36,12 +36,17 @@ export class InfluxClient {
     if (data.press_operator_stop_time !== null && data.press_operator_stop_time !== undefined) {
       result.press_operator_stop_time = this.convertSecondToHms(data.press_operator_stop_time)
     }
-
-    result.press_error_number = this.parseErrorCode(data.press_error_number || 0)
-    result.press_key_cam = this.getKeyCam(data.press_key_cam_inching || 0, data.press_key_cam_one_cycle || 0,
-        data.press_key_cam_continue || 0, data.press_key_cam_slide || 0)
-    result.press_whole_counter = this.mergeWord(data.press_whole_counter_1 || 0, data.press_whole_counter_2 || 0,
-        data.press_whole_counter_3 || 0,data.press_whole_counter_4 || 0)
+    if (data.press_error_number !== null && data.press_error_number !== undefined) {
+      result.press_error_number = this.parseErrorCode(data.press_error_number || 0);
+    }
+    if (this.checkKeyCam(data)) {
+      result.press_key_cam = this.getKeyCam(data.press_key_cam_inching || 0, data.press_key_cam_one_cycle || 0,
+          data.press_key_cam_continue || 0, data.press_key_cam_slide || 0)
+    }
+    if (this.checkWholeCounter(data)) {
+      result.press_whole_counter = this.mergeWord(data.press_whole_counter_1 || 0, data.press_whole_counter_2 || 0,
+          data.press_whole_counter_3 || 0, data.press_whole_counter_4 || 0);
+    }
     return result
   }
 
@@ -79,6 +84,20 @@ export class InfluxClient {
     if (errorCode == 0)
       return 0;
     return 500 + errorCode;
+  }
+
+  checkKeyCam(data: EquipmentScanResult) {
+    return (data.press_key_cam_inching !== null && data.press_key_cam_inching !== undefined)
+        || (data.press_key_cam_one_cycle !== null && data.press_key_cam_one_cycle !== undefined)
+        || (data.press_key_cam_continue !== null && data.press_key_cam_continue !== undefined)
+        || (data.press_key_cam_slide !== null && data.press_key_cam_slide !== undefined)
+  }
+
+  checkWholeCounter(data: EquipmentScanResult) {
+    return data.press_whole_counter_1 !== null && data.press_whole_counter_1 !== undefined
+        && data.press_whole_counter_2 !== null && data.press_whole_counter_2 !== undefined
+        && data.press_whole_counter_3 !== null && data.press_whole_counter_3 !== undefined
+        && data.press_whole_counter_4 !== null && data.press_whole_counter_4 !== undefined
   }
 
   // 데이터 입력
