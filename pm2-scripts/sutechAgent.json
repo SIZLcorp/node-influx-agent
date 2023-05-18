@@ -1,6 +1,17 @@
 {
 	"apps": [
 		{
+			"name": "Agent09",
+			"script": "node",
+            "args": "dist",
+			"env": {
+				"DEBUG": "su-agent:influx:*",
+				"EQUIPMENT_HOST": "192.168.0.159",
+				"EQUIPMENT_DESCRIPTION": "서울 200",
+				"MACHINE_CODE": "P0000159"
+			}
+		},
+		{
 			"name": "Agent08",
 			"script": "node",
             "args": "dist",
@@ -86,17 +97,6 @@
 				"EQUIPMENT_HOST": "192.168.0.151",
 				"EQUIPMENT_DESCRIPTION": "HIM 200",
 				"MACHINE_CODE": "P0000151"
-			}
-		},
-		{
-			"name": "Agent00",
-			"script": "node",
-            "args": "dist",
-			"env": {
-				"DEBUG": "su-agent:influx:*",
-				"EQUIPMENT_HOST": "192.168.0.150",
-				"EQUIPMENT_DESCRIPTION": "서울 200",
-				"MACHINE_CODE": "P0000150"
 			}
 		}
 	]
