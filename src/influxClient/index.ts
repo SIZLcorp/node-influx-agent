@@ -198,6 +198,7 @@ export class InfluxClient {
       point1.stringField('press_operator_stop_time', data.press_operator_stop_time)
     }
     writeDebug("write", point1);
+    writeDebug.extend('preset')("press_preset_counter", data.press_preset_counter);
 
     writeApi.writePoint(point1)
     await writeApi.flush()
