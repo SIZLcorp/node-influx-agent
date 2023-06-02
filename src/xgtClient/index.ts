@@ -9,7 +9,7 @@ import generateHeader from './generator/header'
 import generateReadData from './generator/read'
 import Debug from "debug"
 const debug = Debug("su-agent:xgtClient")
-
+const connectionDebug = debug.extend('connection')
 type SocketStatus = 'CONNECTED' | 'DISCONNECTED' | 'ERROR' | 'CONNECTING'
 export class XGTClient {
   private static instance: XGTClient
@@ -43,24 +43,29 @@ export class XGTClient {
     const socket = net.createConnection(this.config)
     this.socket = socket
     this.status = 'CONNECTING'
-    debug('소켓 접속', this.config)
+    connectionDebug('소켓 접속', this.config)
 
     return new Promise((resolve, reject) => {
       socket.once('connect', () => {
         self.status = 'CONNECTED'
-        debug('소켓 접속됨')
+        connectionDebug('소켓 접속됨')
 
         resolve(socket)
       })
       socket.once("error", (err) => {
         self.status = 'ERROR'
-        debug('소켓 에러', err)
+        connectionDebug('소켓 에러', err)
         self.disconnect()
+        // TODO: 다시 켰을떄, 에러시 재접속해야함..
+        process.kill(process.pid, 'SIGINT')
         reject(err)
       })
       socket.once('close', () => {
         self.status = 'DISCONNECTED'
+        connectionDebug('소켓 close', self.status)
       })
+      // TODO: timeout 이벤트 받아야함
+      // socket.once('drop')
     })
 
 
