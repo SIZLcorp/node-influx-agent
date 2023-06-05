@@ -1,4 +1,4 @@
-declare module "InfluxClient" {
+declare module 'InfluxClient' {
   export interface InfluxClientConfig {
     url: string
     token: string

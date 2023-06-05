@@ -1,5 +1,5 @@
-import { XGTProtocolAddressType, XGTDataType } from "XGTClient"
-import { setDataType } from "../util/setDataType"
+import { XGTProtocolAddressType, XGTDataType } from 'XGTClient'
+import { setDataType } from '../util/setDataType'
 
 export default function readData(address: XGTProtocolAddressType, dataType: XGTDataType): Buffer {
 
@@ -26,7 +26,7 @@ export default function readData(address: XGTProtocolAddressType, dataType: XGTD
     block,
     addrLength,
     addr,
-    data_size
+    data_size,
   ], totalLength)
 }
 

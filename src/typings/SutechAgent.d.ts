@@ -1,7 +1,7 @@
-import { XGTClientConfig, XGTAddressType } from "XGTClient";
-import { InfluxClientConfig, InfluxDataType, InfluxCamField, InfluxPressDataField } from "InfluxClient";
+import { XGTClientConfig, XGTAddressType } from 'XGTClient'
+import { InfluxClientConfig, InfluxDataType, InfluxCamField, InfluxPressDataField } from 'InfluxClient'
 
-declare module "SutechAgent" {
+declare module 'SutechAgent' {
   export interface SutechEquipmentConfig extends XGTClientConfig {
     equipmentCode: string
   }

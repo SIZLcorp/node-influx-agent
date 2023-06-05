@@ -5,13 +5,13 @@
  * */
 
 import { printHEXPretty, BufferSlicer } from '.'
-import Debug from "debug"
-const debug = Debug("su-agent:xgtClient:requestParser")
+import Debug from 'debug'
+const debug = Debug('su-agent:xgtClient:requestParser')
 
 export function parseReadRequest(buf: Buffer): void {
   const slicer = new BufferSlicer()
 
-  debug(`>> PARSED REQUEST`)
+  debug('>> PARSED REQUEST')
 
   const company_id = slicer.getSlice(buf, 10)
   const plc_info = slicer.getSlice(buf, 2)
@@ -54,7 +54,7 @@ export function parseWriteRequest(buf: Buffer): void {
   const slicer = new BufferSlicer()
 
 
-  debug(`>> PARSED REQUEST`)
+  debug('>> PARSED REQUEST')
 
   const company_id = slicer.getSlice(buf, 10)
   const plc_info = slicer.getSlice(buf, 2)

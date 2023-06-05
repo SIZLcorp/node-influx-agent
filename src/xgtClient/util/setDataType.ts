@@ -1,4 +1,4 @@
-import { XGTDataType } from "XGTClient"
+import { XGTDataType } from 'XGTClient'
 
 export function setDataType(dataType: XGTDataType): Buffer {
   let temp
