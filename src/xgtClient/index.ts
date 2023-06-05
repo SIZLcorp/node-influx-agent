@@ -1,4 +1,5 @@
-import { XGTClientConfig, XGTDataType, XGTAddressType, XGTDataTypeChar } from "XGTClient"
+/* eslint-disable @typescript-eslint/no-this-alias */
+import { XGTClientConfig, XGTAddressType, XGTDataTypeChar } from 'XGTClient'
 
 import * as net from 'net'
 import { XGTAddressGenerator, printHEXPretty } from './util'
@@ -7,25 +8,40 @@ import { parseReadRequest } from './util/requestParser'
 import { parseReadResponse } from './util/responseParser'
 import generateHeader from './generator/header'
 import generateReadData from './generator/read'
-import Debug from "debug"
-const debug = Debug("su-agent:xgtClient")
+import Debug from 'debug'
+import { ErrnoException } from 'SutechEquipment'
+const debug = Debug('su-agent:xgtClient')
+const socketDebug = debug.extend('socket')
+const connectionDebug = socketDebug.extend('connection')
+import { EventEmitter } from 'node:events'
 
-type SocketStatus = 'CONNECTED' | 'DISCONNECTED' | 'ERROR' | 'CONNECTING'
-export class XGTClient {
+export type SocketStatus = 'CONNECTED' | 'DISCONNECTED' | 'ERROR' | 'CONNECTING'
+export class XGTClient extends EventEmitter {
   private static instance: XGTClient
-  socket: net.Socket | null = null
   status: SocketStatus = 'DISCONNECTED'
   config: XGTClientConfig
+  socket: net.Socket
+  intervalConnect: NodeJS.Timer | null = null
 
   private constructor(config: XGTClientConfig) {
+    super()
+
     const self = this
     this.config = config
+    const socket = new net.Socket()
 
-    // Gracefully.. 프로세스 종료 감지시 disconnect 요청함
-    process.on('SIGINT', () => {
-      self.disconnect()
-      process.exit()
-    })
+    this.socket = socket
+
+    self.connect()
+
+
+
+    // // Gracefully.. 프로세스 종료 감지시 disconnect 요청함
+    // process.on('SIGINT', () => {
+    //   console.warn('??????????')
+    //   self.disconnect()
+    //   process.exit()
+    // })
   }
   public static getInstance(config: XGTClientConfig) {
     if (!this.instance) {
@@ -34,81 +50,137 @@ export class XGTClient {
     return this.instance
   }
 
+  launchIntervalConnect() {
+    if (this.intervalConnect) return
+    this.intervalConnect = setInterval(this.connect.bind(this), 1000)
+  }
+  clearIntervalConnect() {
+    if (!this.intervalConnect) return
+    clearInterval(this.intervalConnect)
+    this.intervalConnect = null
+  }
+
+  setStatus(status: SocketStatus) {
+    const oldStatus = this.status
+    if (oldStatus === 'CONNECTED' && status === 'DISCONNECTED') {
+      this.emit('socket:disconnected')
+    }
+    if (oldStatus !== 'CONNECTED' && status === 'CONNECTED') {
+      this.emit('socket:connected')
+    }
+    this.status = status
+
+  }
+
   // 명시적으로 접속을 요청해야함 connect
   connect(): Promise<net.Socket> {
+
     const self = this
-    if (this.status !== 'DISCONNECTED') {
-      return Promise.reject(new Error('Already connected'))
-    }
-    const socket = net.createConnection(this.config)
-    this.socket = socket
-    this.status = 'CONNECTING'
-    debug('소켓 접속', this.config)
+    const socket = self.socket
 
-    return new Promise((resolve, reject) => {
-      socket.once('connect', () => {
-        self.status = 'CONNECTED'
-        debug('소켓 접속됨')
-
-        resolve(socket)
-      })
-      socket.once("error", (err) => {
-        self.status = 'ERROR'
-        debug('소켓 에러', err)
-        self.disconnect()
-        reject(err)
-      })
-      socket.once('close', () => {
-        self.status = 'DISCONNECTED'
-      })
+    socket.on('end', () => {
+      self.disconnect()
+    })
+    socket.on('error', (err: ErrnoException) => {
+      self.setStatus('ERROR')
+      connectionDebug('소켓 에러', err)
+      self.disconnect()
+    })
+    socket.on('close', () => {
+      connectionDebug('소켓 close', self.status)
+      self.disconnect()
     })
 
+    connectionDebug('소켓 접속 !!', self.status)
 
+    if (this.status === 'CONNECTED') {
+      return Promise.reject(new Error('Already connected'))
+
+    }
+    return new Promise((resolve, reject) => {
+      if (!socket.connecting) {
+        const timeout = setTimeout(() => {
+          connectionDebug('소켓 접속 시도 timeout')
+          self.disconnect()
+        }, 200)
+
+        socket.once('connect', () => {
+          clearTimeout(timeout)
+          self.clearIntervalConnect()
+          self.setStatus('CONNECTED')
+          connectionDebug('소켓 접속됨')
+          resolve(socket)
+        })
+
+        socket.connect(this.config)
+        self.setStatus('CONNECTING')
+        connectionDebug('소켓 접속 시도', this.config)
+      } else {
+        self.once('socket:connected', () => {
+          resolve(socket)
+        })
+        self.once('socket:disconnected', () => {
+          reject()
+        })
+      }
+    })
   }
 
   // 명시적으로 접속 해제를 요청해야함, 프로그램 종료 감지시 disconnect 요청함
   disconnect(): void {
-    if (this.socket) {
-      this.socket.destroy()
-      this.socket = null
-      this.status = 'DISCONNECTED'
-    }
+    this.setStatus('DISCONNECTED')
+    connectionDebug('소켓 접속 끊음')
+    this.socket.removeAllListeners('connect')
+    this.socket.removeAllListeners('error')
+    this.socket.removeAllListeners('close')
+    this.socket.removeAllListeners('end')
+    this.socket.destroy()
+    this.launchIntervalConnect()
   }
 
 
-  async readData(address: XGTAddressType, dataType: XGTDataTypeChar): Promise<number> {
-    let dataAddr = XGTAddressGenerator(address, dataType)
-    let temp = generateReadData(dataAddr, 'seq')
+  async readData(address: XGTAddressType, dataType: XGTDataTypeChar): Promise<number | null> {
+    if (this.status !== 'CONNECTED') {
+      return null
+    }
 
-    let header = generateHeader(temp)
-    let total_length = temp.length + header.length
-    let reqData = Buffer.concat([header, temp], total_length)
+    const dataAddr = XGTAddressGenerator(address, dataType)
+    const temp = generateReadData(dataAddr, 'seq')
+
+    const header = generateHeader(temp)
+    const total_length = temp.length + header.length
+    const reqData = Buffer.concat([header, temp], total_length)
 
     // debug(reqData)
     return this.request_data(reqData)
   }
 
-  private async request_data(reqData: Buffer): Promise<number> {
+  private async request_data(reqData: Buffer): Promise<number | null> {
     const self = this
+
+
+
     // TODO: 요청을 동시에 보내는걸 막아야 한다. 그렇다면 queue처럼 동작해야 할까?
     // 일단은 그렇게까지는 하지 말고, 내부적으로만 여러 요청이 동시에 가지 않는다고 가정만 하자..
-    if (this.status == 'DISCONNECTED') {
-      await this.connect()
-    }
-
     debug('[server] request from client: \n', printHEXPretty(reqData))
     parseReadRequest(reqData)
 
     return new Promise((resolve, reject) => {
-      self.socket!.once('data', serverData => {
-        debug(`[client] received data from server: 
-      ${printHEXPretty(serverData)}`)
+      // timeout, error 처리
+      const timeout = setTimeout(() => {
+        self.disconnect()
+        reject(new Error('timeout'))
+      }, 100)
+
+      self.socket?.once('data', serverData => {
+        clearTimeout(timeout as NodeJS.Timeout)
+        debug(`[client] received data from server: ${printHEXPretty(serverData)}`)
         const parsedResponse = parseReadResponse(serverData)
         //TODO: 값 해석해서 결과만 돌려줘야함
         resolve(parsedResponse?.body.data)
       })
 
-      self.socket!.write(reqData)
+      self.socket?.write(reqData)
     })
   }
 
