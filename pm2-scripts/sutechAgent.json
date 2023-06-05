@@ -1,14 +1,102 @@
 {
 	"apps": [
 		{
+			"name": "Agent09",
+			"script": "node",
+            "args": "dist",
+			"env": {
+				"DEBUG": "su-agent:influx:*",
+				"EQUIPMENT_HOST": "192.168.0.159",
+				"EQUIPMENT_DESCRIPTION": "서울 200",
+				"MACHINE_CODE": "P0000159"
+			}
+		},
+		{
+			"name": "Agent08",
+			"script": "node",
+            "args": "dist",
+			"env": {
+				"DEBUG": "su-agent:influx:*",
+				"EQUIPMENT_HOST": "192.168.0.158",
+				"EQUIPMENT_DESCRIPTION": "화일 250",
+				"MACHINE_CODE": "P0000158"
+			}
+		},
+		{
 			"name": "Agent07",
 			"script": "node",
-            "args": ["dist","--trace-warnings"],
+            "args": "dist",
 			"env": {
-				"DEBUG": "su-agent:xgtClient:socket*,su-agent:equipment,su-agent:influx:write:preset",
-				"EQUIPMENT_HOST": "192.168.100.157",
-				"EQUIPMENT_DESCRIPTION": "참신150",
+				"DEBUG": "su-agent:influx:*",
+				"EQUIPMENT_HOST": "192.168.0.157",
+				"EQUIPMENT_DESCRIPTION": "서울 200",
 				"MACHINE_CODE": "P0000157"
+			}
+		},
+		{
+			"name": "Agent06",
+			"script": "node",
+            "args": "dist",
+			"env": {
+				"DEBUG": "su-agent:influx:*",
+				"EQUIPMENT_HOST": "192.168.0.156",
+				"EQUIPMENT_DESCRIPTION": "국일 2500",
+				"MACHINE_CODE": "P0000156"
+			}
+		},
+		{
+			"name": "Agent05",
+			"script": "node",
+            "args": "dist",
+			"env": {
+				"DEBUG": "su-agent:influx:*",
+				"EQUIPMENT_HOST": "192.168.0.155",
+				"EQUIPMENT_DESCRIPTION": "쌍용 150",
+				"MACHINE_CODE": "P0000155"
+			}
+		},
+		{
+			"name": "Agent04",
+			"script": "node",
+            "args": "dist",
+			"env": {
+				"DEBUG": "su-agent:influx:*",
+				"EQUIPMENT_HOST": "192.168.0.154",
+				"EQUIPMENT_DESCRIPTION": "국일 110",
+				"MACHINE_CODE": "P0000154"
+			}
+		},
+		{
+			"name": "Agent03",
+			"script": "node",
+            "args": "dist",
+			"env": {
+				"DEBUG": "su-agent:influx:*",
+				"EQUIPMENT_HOST": "192.168.0.153",
+				"EQUIPMENT_DESCRIPTION": "쌍용 110",
+				"MACHINE_CODE": "P0000153"
+			}
+		},
+		{
+			"name": "Agent02",
+			"script": "node",
+            "args": "dist",
+			"env": {
+				"DEBUG": "su-agent:influx:*",
+				"EQUIPMENT_HOST": "192.168.0.152",
+				"EQUIPMENT_DESCRIPTION": "서울 160",
+				"MACHINE_CODE": "P0000152"
+			}
+		},
+		{
+			"name": "Agent01",
+			"script": "node",
+            "args": "dist",
+			"env": {
+				"DEBUG": "su-agent:influx:*",
+				"EQUIPMENT_HOST": "192.168.0.151",
+				"EQUIPMENT_DESCRIPTION": "HIM 200",
+				"MACHINE_CODE": "P0000151"
 			}
 		}
 	]
