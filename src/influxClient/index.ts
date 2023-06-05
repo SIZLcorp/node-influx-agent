@@ -1,22 +1,22 @@
-import {InfluxClientConfig} from "InfluxClient";
-import {InfluxDB, Point} from '@influxdata/influxdb-client'
-import {COMPANY_CODE, INFLUX_BUCKET, INFLUX_ORG, INFLUX_TOKEN, INFLUX_URL, MACHINE_CODE} from '../env'
-import {EquipmentScanResult} from "SutechEquipment";
-import Debug from "debug"
+import { InfluxClientConfig } from 'InfluxClient'
+import { InfluxDB, Point } from '@influxdata/influxdb-client'
+import { COMPANY_CODE, INFLUX_BUCKET, INFLUX_ORG, INFLUX_TOKEN, INFLUX_URL, MACHINE_CODE } from '../env'
+import { EquipmentScanResult } from 'SutechEquipment'
+import Debug from 'debug'
 
-const debug = Debug("su-agent:influx")
+const debug = Debug('su-agent:influx')
 
 export class InfluxClient {
-  influxConfig: InfluxClientConfig;
-  influxInstance: InfluxDB;
+  influxConfig: InfluxClientConfig
+  influxInstance: InfluxDB
   constructor(influxConfig: InfluxClientConfig) {
-    this.influxConfig = influxConfig;
+    this.influxConfig = influxConfig
     this.influxInstance = new InfluxDB({ url: INFLUX_URL, token: INFLUX_TOKEN })
   }
 
 
   convert(data: EquipmentScanResult): EquipmentScanResult {
-    let result = data
+    const result = data
     // true, false 로 받는것 0, 1 로 변환해야함
     if (data.press_run_ready !== null && data.press_run_ready !== undefined) {
       result.press_run_ready = data.press_run_ready ? 1 : 0
@@ -37,73 +37,73 @@ export class InfluxClient {
       result.press_operator_stop_time = this.convertSecondToHms(data.press_operator_stop_time)
     }
     if (data.press_error_number !== null && data.press_error_number !== undefined) {
-      result.press_error_number = this.parseErrorCode(data.press_error_number || 0);
+      result.press_error_number = this.parseErrorCode(data.press_error_number || 0)
     }
     if (this.checkKeyCam(data)) {
       result.press_key_cam = this.getKeyCam(data.press_key_cam_inching || 0, data.press_key_cam_one_cycle || 0,
-          data.press_key_cam_continue || 0, data.press_key_cam_slide || 0)
+        data.press_key_cam_continue || 0, data.press_key_cam_slide || 0)
     }
     if (this.checkWholeCounter(data)) {
       result.press_whole_counter = this.mergeWord(data.press_whole_counter_1 || 0, data.press_whole_counter_2 || 0,
-          data.press_whole_counter_3 || 0, data.press_whole_counter_4 || 0);
+        data.press_whole_counter_3 || 0, data.press_whole_counter_4 || 0)
     }
     return result
   }
 
   mergeWord(first: number, second: number, third: number, last: number): bigint {
-    const buf = Buffer.allocUnsafe(8);
+    const buf = Buffer.allocUnsafe(8)
 
-    buf.writeUint16LE(first, 0);
-    buf.writeUInt16LE(second, 2);
-    buf.writeUInt16LE(third, 4);
-    buf.writeUInt16LE(last, 6);
+    buf.writeUint16LE(first, 0)
+    buf.writeUInt16LE(second, 2)
+    buf.writeUInt16LE(third, 4)
+    buf.writeUInt16LE(last, 6)
 
     return buf.readBigUInt64LE(0)
   }
 
-  convertSecondToHms(second:string): string {
-    const seconds = parseInt(second);
-    const [mins, secs] = [Math.floor(seconds / 60), seconds % 60];
-    const [hrs, mins2] = [Math.floor(mins / 60), mins % 60];
-    return `${hrs.toString().padStart(2, '0')}:${mins2.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  convertSecondToHms(second: string): string {
+    const seconds = parseInt(second)
+    const [mins, secs] = [Math.floor(seconds / 60), seconds % 60]
+    const [hrs, mins2] = [Math.floor(mins / 60), mins % 60]
+    return `${hrs.toString().padStart(2, '0')}:${mins2.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`
   }
 
   getKeyCam(inching: number, oneCycle: number, camContinue: number, slide: number) {
     if (inching == 1)
-      return 1;
+      return 1
     if (oneCycle == 1)
-      return 2;
+      return 2
     if (camContinue == 1)
-      return 3;
+      return 3
     if (slide == 1)
-      return 4;
-    return 0;
+      return 4
+    return 0
   }
 
   parseErrorCode(errorCode: number) {
     if (errorCode == 0)
-      return 0;
-    return 500 + errorCode;
+      return 0
+    return 500 + errorCode
   }
 
   checkKeyCam(data: EquipmentScanResult) {
     return (data.press_key_cam_inching !== null && data.press_key_cam_inching !== undefined)
-        || (data.press_key_cam_one_cycle !== null && data.press_key_cam_one_cycle !== undefined)
-        || (data.press_key_cam_continue !== null && data.press_key_cam_continue !== undefined)
-        || (data.press_key_cam_slide !== null && data.press_key_cam_slide !== undefined)
+      || (data.press_key_cam_one_cycle !== null && data.press_key_cam_one_cycle !== undefined)
+      || (data.press_key_cam_continue !== null && data.press_key_cam_continue !== undefined)
+      || (data.press_key_cam_slide !== null && data.press_key_cam_slide !== undefined)
   }
 
   checkWholeCounter(data: EquipmentScanResult) {
     return data.press_whole_counter_1 !== null && data.press_whole_counter_1 !== undefined
-        && data.press_whole_counter_2 !== null && data.press_whole_counter_2 !== undefined
-        && data.press_whole_counter_3 !== null && data.press_whole_counter_3 !== undefined
-        && data.press_whole_counter_4 !== null && data.press_whole_counter_4 !== undefined
+      && data.press_whole_counter_2 !== null && data.press_whole_counter_2 !== undefined
+      && data.press_whole_counter_3 !== null && data.press_whole_counter_3 !== undefined
+      && data.press_whole_counter_4 !== null && data.press_whole_counter_4 !== undefined
   }
 
   // 데이터 입력
   async write(inp: EquipmentScanResult): Promise<void> {
     const data = this.convert(inp)
-    const writeDebug = debug.extend("write")
+    const writeDebug = debug.extend('write')
     const writeApi = this.influxInstance.getWriteApi(INFLUX_ORG, INFLUX_BUCKET, 'ns')
     // writeDebug("write", data);
 
@@ -197,8 +197,8 @@ export class InfluxClient {
     if (data.press_operator_stop_time !== null && data.press_operator_stop_time !== undefined) {
       point1.stringField('press_operator_stop_time', data.press_operator_stop_time)
     }
-    writeDebug("write", point1);
-    writeDebug.extend('preset')("press_preset_counter", data.press_preset_counter);
+    writeDebug('write', point1)
+    writeDebug.extend('preset')('press_preset_counter', data.press_preset_counter)
 
     writeApi.writePoint(point1)
     await writeApi.flush()

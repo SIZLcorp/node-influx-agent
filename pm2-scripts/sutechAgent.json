@@ -1,21 +1,14 @@
 {
 	"apps": [
 		{
-			"name": "01-Agent",
-			"script": "node dist",
+			"name": "Agent07",
+			"script": "node",
+            "args": ["dist","--trace-warnings"],
 			"env": {
-				"DEBUG": "su-agent",
-				"EQUIPMENT_HOST": "192.168.100.111",
-				"MACHINE_CODE": "P001"
-			}
-		},
-		{
-			"name": "02-Agent",
-			"script": "node dist",
-			"env": {
-				"DEBUG": "su-agent",
-				"EQUIPMENT_HOST": "192.168.100.113",
-				"MACHINE_CODE": "P002"
+				"DEBUG": "su-agent:xgtClient:socket*,su-agent:equipment,su-agent:influx:write:preset",
+				"EQUIPMENT_HOST": "192.168.100.157",
+				"EQUIPMENT_DESCRIPTION": "참신150",
+				"MACHINE_CODE": "P0000157"
 			}
 		}
 	]

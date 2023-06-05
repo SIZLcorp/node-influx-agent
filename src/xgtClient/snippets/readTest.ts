@@ -2,7 +2,7 @@ import { XGTClient } from '..'
 
 const xgtClient = XGTClient.getInstance({
   port: 2004,
-  host: '192.168.100.110'
+  host: '192.168.100.110',
 })
 
 async function run() {
@@ -15,7 +15,7 @@ async function run() {
     total_count,
     press_acc_count,
     preset_count,
-    ready_status
+    ready_status,
   })
 }
 

@@ -1,4 +1,4 @@
-import { XGTAddressType, XGTArea, XGTDataTypeChar, XGTProtocolAddressType } from "XGTClient"
+import { XGTAddressType, XGTArea, XGTDataTypeChar, XGTProtocolAddressType } from 'XGTClient'
 
 export function printHEXPretty(str: Buffer): string | undefined {
   if (!str) {

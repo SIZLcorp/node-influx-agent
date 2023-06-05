@@ -26,9 +26,7 @@ async function iterateRows() {
     // the following line creates an object for each row
     const o = tableMeta.toObject(values)
     // console.log(JSON.stringify(o, null, 2))
-    console.log(
-      `${o._time} ${o._measurement} in '${o.location}' (${o.example}): ${o._field}=${o._value}`
-    )
+    console.log(`${o._time} ${o._measurement} in '${o.location}' (${o.example}): ${o._field}=${o._value}`)
 
     // alternatively, you can get only a specific column value without
     // the need to create an object for every row
@@ -46,9 +44,7 @@ function queryRows() {
       // the following line creates an object for each row
       const o = tableMeta.toObject(row)
       // console.log(JSON.stringify(o, null, 2))
-      console.log(
-        `${o._time} ${o._measurement} in '${o.location}' (${o.example}): ${o._field}=${o._value}`
-      )
+      console.log(`${o._time} ${o._measurement} in '${o.location}' (${o.example}): ${o._field}=${o._value}`)
 
       // alternatively, you can get only a specific column value without
       // the need to create an object for every row
@@ -70,7 +66,7 @@ queryRows()
 async function collectRows() {
   console.log('\n*** CollectRows ***')
   const data = await queryApi.collectRows(
-    fluxQuery //, you can also specify a row mapper as a second argument
+    fluxQuery, //, you can also specify a row mapper as a second argument
   )
   data.forEach((x) => console.log(JSON.stringify(x)))
   console.log('\nCollect ROWS SUCCESS')
