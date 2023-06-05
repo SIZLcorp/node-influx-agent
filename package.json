@@ -29,7 +29,7 @@
     "build": "npm run clean && npx tsc --build tsconfig.build.json",
     "postbuild": "shx cp package*.json dist && cd dist && npm ci --production",
     "start": "node dist",
-    "dev": "cross-env DEBUG=su-agent ts-node -r dotenv/config src/index.ts",
+    "dev": "cross-env DEBUG=su-agent:influx:* ts-node -r dotenv/config src/index.ts",
     "read": "cross-env DEBUG=* ts-node -r dotenv/config src/xgtClient/snippets/readSample.ts",
     "write": "cross-env DEBUG=* ts-node -r dotenv/config src/xgtClient/snippets/writeSample.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
