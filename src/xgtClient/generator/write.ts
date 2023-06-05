@@ -1,5 +1,5 @@
-import { XGTProtocolAddressType, XGTDataType } from "XGTClient"
-import { setDataType } from "../util/setDataType"
+import { XGTProtocolAddressType, XGTDataType } from 'XGTClient'
+import { setDataType } from '../util/setDataType'
 
 export default function writeData(address: XGTProtocolAddressType, dataType: XGTDataType, buf: Buffer) {
   const command = Buffer.from([0x58, 0x00])
@@ -25,7 +25,7 @@ export default function writeData(address: XGTProtocolAddressType, dataType: XGT
     addrLength,
     addr,
     bufferLength,
-    buf
+    buf,
   ], totalLength)
 
 }

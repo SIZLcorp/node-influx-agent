@@ -6,13 +6,13 @@
 
 import { XGTReadResponse } from 'XGTClient'
 import { printHEXPretty, BufferSlicer } from '.'
-import Debug from "debug"
-const debug = Debug("su-agent:xgtClient:responseParser")
+import Debug from 'debug'
+const debug = Debug('su-agent:xgtClient:responseParser')
 
 export function parseReadResponse(buf: Buffer): XGTReadResponse {
   const slicer = new BufferSlicer()
 
-  debug(`<< PARSED RESPONSE`)
+  debug('<< PARSED RESPONSE')
   // HEADER
   const company_id: Buffer = slicer.getSlice(buf, 10)
   const plc_info: Buffer = slicer.getSlice(buf, 2)
@@ -74,15 +74,15 @@ RESERVED2\t\t${printHEXPretty(reserved2)}`)
         data_size: data_size.readIntLE(0, data_size.length),
       }),
       ...(data && {
-        data: data.readUintLE(0, data.length)
-      })
-    }
+        data: data.readUintLE(0, data.length),
+      }),
+    },
   }
 }
 
 export function parseWriteResponse(buf: Buffer): void {
   const slicer = new BufferSlicer()
-  debug(`<< PARSED RESPONSE`)
+  debug('<< PARSED RESPONSE')
   // HEADER
   const company_id = slicer.getSlice(buf, 10)
   const plc_info = slicer.getSlice(buf, 2)

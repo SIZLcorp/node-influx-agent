@@ -1,4 +1,4 @@
-declare module "SutechEquipment" {
+declare module 'SutechEquipment' {
 
   export interface EquipmentMemory {
     'press_spm'?: number, // 분당 회전 수
@@ -36,5 +36,13 @@ declare module "SutechEquipment" {
   export interface EquipmentScanResult extends EquipmentMemory {
     startAt: Date | null
     endAt: Date | null
+  }
+
+  export interface ErrnoException extends Error {
+    errno?: number;
+    code?: string;
+    path?: string;
+    syscall?: string;
+    stack?: string;
   }
 }
