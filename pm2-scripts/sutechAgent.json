@@ -1,13 +1,35 @@
 {
 	"apps": [
 		{
+			"name": "Agent09",
+			"script": "node",
+            "args": "dist",
+			"env": {
+				"DEBUG": "su-agent:influx:*",
+				"EQUIPMENT_HOST": "192.168.0.159",
+				"EQUIPMENT_DESCRIPTION": "서울 200",
+				"MACHINE_CODE": "P0000159"
+			}
+		},
+		{
+			"name": "Agent08",
+			"script": "node",
+            "args": "dist",
+			"env": {
+				"DEBUG": "su-agent:influx:*",
+				"EQUIPMENT_HOST": "192.168.0.158",
+				"EQUIPMENT_DESCRIPTION": "화일 250",
+				"MACHINE_CODE": "P0000158"
+			}
+		},
+		{
 			"name": "Agent07",
 			"script": "node",
             "args": "dist",
 			"env": {
 				"DEBUG": "su-agent:influx:*",
 				"EQUIPMENT_HOST": "192.168.0.157",
-				"EQUIPMENT_DESCRIPTION": "참신150",
+				"EQUIPMENT_DESCRIPTION": "서울 200",
 				"MACHINE_CODE": "P0000157"
 			}
 		},
@@ -18,7 +40,7 @@
 			"env": {
 				"DEBUG": "su-agent:influx:*",
 				"EQUIPMENT_HOST": "192.168.0.156",
-				"EQUIPMENT_DESCRIPTION": "화일200",
+				"EQUIPMENT_DESCRIPTION": "국일 2500",
 				"MACHINE_CODE": "P0000156"
 			}
 		},
@@ -29,7 +51,7 @@
 			"env": {
 				"DEBUG": "su-agent:influx:*",
 				"EQUIPMENT_HOST": "192.168.0.155",
-				"EQUIPMENT_DESCRIPTION": "국일160D",
+				"EQUIPMENT_DESCRIPTION": "쌍용 150",
 				"MACHINE_CODE": "P0000155"
 			}
 		},
@@ -40,7 +62,7 @@
 			"env": {
 				"DEBUG": "su-agent:influx:*",
 				"EQUIPMENT_HOST": "192.168.0.154",
-				"EQUIPMENT_DESCRIPTION": "화일160",
+				"EQUIPMENT_DESCRIPTION": "국일 110",
 				"MACHINE_CODE": "P0000154"
 			}
 		},
@@ -51,7 +73,7 @@
 			"env": {
 				"DEBUG": "su-agent:influx:*",
 				"EQUIPMENT_HOST": "192.168.0.153",
-				"EQUIPMENT_DESCRIPTION": "한일HKCP110",
+				"EQUIPMENT_DESCRIPTION": "쌍용 110",
 				"MACHINE_CODE": "P0000153"
 			}
 		},
@@ -62,7 +84,7 @@
 			"env": {
 				"DEBUG": "su-agent:influx:*",
 				"EQUIPMENT_HOST": "192.168.0.152",
-				"EQUIPMENT_DESCRIPTION": "국일PCA110N",
+				"EQUIPMENT_DESCRIPTION": "서울 160",
 				"MACHINE_CODE": "P0000152"
 			}
 		},
@@ -73,19 +95,8 @@
 			"env": {
 				"DEBUG": "su-agent:influx:*",
 				"EQUIPMENT_HOST": "192.168.0.151",
-				"EQUIPMENT_DESCRIPTION": "쌍용CS110",
+				"EQUIPMENT_DESCRIPTION": "HIM 200",
 				"MACHINE_CODE": "P0000151"
-			}
-		},
-		{
-			"name": "Agent00",
-			"script": "node",
-            "args": "dist",
-			"env": {
-				"DEBUG": "su-agent:influx:*",
-				"EQUIPMENT_HOST": "192.168.0.150",
-				"EQUIPMENT_DESCRIPTION": "HIM60",
-				"MACHINE_CODE": "P0000150"
 			}
 		}
 	]
