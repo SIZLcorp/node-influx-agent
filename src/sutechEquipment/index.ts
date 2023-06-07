@@ -30,12 +30,16 @@ export class SutechEquipment extends EventEmitter {
     this.xgtClient = XGTClient.getInstance(config)
     this.memoryMap = memoryMap
     this.reset()
+
+    this.xgtClient.on('socket:disconnect', () => {
+      this.reset()
+    })
   }
 
   async scan(): Promise<void> {
     debug('scan', this.isScanning, this.xgtClient.status)
     if (this.xgtClient.status === 'DISCONNECTED' && this.isScanning) {
-      this.isScanning = false
+      this.reset()
     }
     if (this.xgtClient.status === 'DISCONNECTED') {
       return
@@ -58,7 +62,7 @@ export class SutechEquipment extends EventEmitter {
       // memoryMap iteration (Async)
       for (const item of this.memoryMap) {
         const data = await this.xgtClient.readData(item.plcAddress, item.dataType)
-        if (data) {
+        if (data !== null && data !== undefined) {
           let parsedData: number | boolean | string = data
           if (item.bitIndex !== undefined) {
             parsedData = this.getBitFromUInt16LE(data, item.bitIndex)
@@ -73,6 +77,7 @@ export class SutechEquipment extends EventEmitter {
       this.emit('scanEnd', this.memory)
       this.endAt = new Date()
     } catch (error) {
+      debug('scan Error', error)
       this.isScanning = false
     }
   }
@@ -103,23 +108,20 @@ export class SutechEquipment extends EventEmitter {
   // f) 모아진 데이터 출력 함수
   // 인플럭스쪽에서 데이터 출력값 가지고 인플럭스 입력값 만들어야 한다.
   async getMemory(): Promise<EquipmentScanResult | null> {
-    // const self = this
+    const self = this
 
     if (this.xgtClient.status !== 'CONNECTED') {
       return null
     }
     // 접속되었고, 아직 스캔중이라면..?
-    // if (this.isScanning && this.xgtClient.status === 'CONNECTED') {
-    //   // 기달림..
-    //   await new Promise((resolve) => {
-    //     self.once('scanEnd', (result: unknown) => {
-    //       resolve(result)
-    //     })
-    //     self.xgtClient.once('socket:disconnect', () => {
-    //       resolve(null)
-    //     })
-    //   })
-    // }
+    if (this.isScanning && this.xgtClient.status === 'CONNECTED') {
+      // 기달림..
+      await new Promise((resolve) => {
+        self.once('scanEnd', (result: unknown) => {
+          resolve(result)
+        })
+      })
+    }
 
     return ({
       ...this.memory,
