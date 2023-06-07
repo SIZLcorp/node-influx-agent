@@ -62,7 +62,7 @@ export class SutechEquipment extends EventEmitter {
       // memoryMap iteration (Async)
       for (const item of this.memoryMap) {
         const data = await this.xgtClient.readData(item.plcAddress, item.dataType)
-        if (data) {
+        if (data !== null && data !== undefined) {
           let parsedData: number | boolean | string = data
           if (item.bitIndex !== undefined) {
             parsedData = this.getBitFromUInt16LE(data, item.bitIndex)
@@ -77,6 +77,7 @@ export class SutechEquipment extends EventEmitter {
       this.emit('scanEnd', this.memory)
       this.endAt = new Date()
     } catch (error) {
+      debug('scan Error', error)
       this.isScanning = false
     }
   }
