@@ -1,91 +1,14 @@
 {
 	"apps": [
 		{
-			"name": "Agent07",
+			"name": "DEVAgent07",
 			"script": "node",
-            "args": "dist",
+            "args": ["dist","--trace-warnings"],
 			"env": {
-				"DEBUG": "su-agent:influx:*",
-				"EQUIPMENT_HOST": "192.168.0.157",
+				"DEBUG": "su-agent:xgtClient:socket*,su-agent:equipment,su-agent:influx:write:preset",
+				"EQUIPMENT_HOST": "192.168.100.157",
 				"EQUIPMENT_DESCRIPTION": "참신150",
-				"MACHINE_CODE": "P0000157"
-			}
-		},
-		{
-			"name": "Agent06",
-			"script": "node",
-            "args": "dist",
-			"env": {
-				"DEBUG": "su-agent:influx:*",
-				"EQUIPMENT_HOST": "192.168.0.156",
-				"EQUIPMENT_DESCRIPTION": "화일200",
-				"MACHINE_CODE": "P0000156"
-			}
-		},
-		{
-			"name": "Agent05",
-			"script": "node",
-            "args": "dist",
-			"env": {
-				"DEBUG": "su-agent:influx:*",
-				"EQUIPMENT_HOST": "192.168.0.155",
-				"EQUIPMENT_DESCRIPTION": "국일160D",
-				"MACHINE_CODE": "P0000155"
-			}
-		},
-		{
-			"name": "Agent04",
-			"script": "node",
-            "args": "dist",
-			"env": {
-				"DEBUG": "su-agent:influx:*",
-				"EQUIPMENT_HOST": "192.168.0.154",
-				"EQUIPMENT_DESCRIPTION": "화일160",
-				"MACHINE_CODE": "P0000154"
-			}
-		},
-		{
-			"name": "Agent03",
-			"script": "node",
-            "args": "dist",
-			"env": {
-				"DEBUG": "su-agent:influx:*",
-				"EQUIPMENT_HOST": "192.168.0.153",
-				"EQUIPMENT_DESCRIPTION": "한일HKCP110",
-				"MACHINE_CODE": "P0000153"
-			}
-		},
-		{
-			"name": "Agent02",
-			"script": "node",
-            "args": "dist",
-			"env": {
-				"DEBUG": "su-agent:influx:*",
-				"EQUIPMENT_HOST": "192.168.0.152",
-				"EQUIPMENT_DESCRIPTION": "국일PCA110N",
-				"MACHINE_CODE": "P0000152"
-			}
-		},
-		{
-			"name": "Agent01",
-			"script": "node",
-            "args": "dist",
-			"env": {
-				"DEBUG": "su-agent:influx:*",
-				"EQUIPMENT_HOST": "192.168.0.151",
-				"EQUIPMENT_DESCRIPTION": "쌍용CS110",
-				"MACHINE_CODE": "P0000151"
-			}
-		},
-		{
-			"name": "Agent00",
-			"script": "node",
-            "args": "dist",
-			"env": {
-				"DEBUG": "su-agent:influx:*",
-				"EQUIPMENT_HOST": "192.168.0.150",
-				"EQUIPMENT_DESCRIPTION": "HIM60",
-				"MACHINE_CODE": "P0000150"
+				"MACHINE_CODE": "PD0000157"
 			}
 		}
 	]
