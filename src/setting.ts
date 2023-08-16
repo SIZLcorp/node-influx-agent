@@ -3,22 +3,29 @@ import { SutechConfigItem } from './sutechEquipment'
 export const mappingSetting: SutechConfigItem[] = [
   {
     'dataCode': 'press_key_cam_inching',
-    'plcAddress': 'M21',
-    'bitIndex': 1,
+    'plcAddress': 'P0',
+    'bitIndex': 2, //c
     'name': '키캠값',
     'dataType': 'B',
   },
   {
     'dataCode': 'press_key_cam_one_cycle',
-    'plcAddress': 'M21',
-    'bitIndex': 2,
+    'plcAddress': 'P0',
+    'bitIndex': 3,  //d
     'name': '키캠값',
     'dataType': 'B',
   },
   {
     'dataCode': 'press_key_cam_continue',
-    'plcAddress': 'M21',
-    'bitIndex': 3,
+    'plcAddress': 'P0',
+    'bitIndex': 4,  //e
+    'name': '키캠값',
+    'dataType': 'B',
+  },
+  {
+    'dataCode': 'press_key_cam_slide',
+    'plcAddress': 'P0',
+    'bitIndex': 0, //a
     'name': '키캠값',
     'dataType': 'B',
   },
@@ -27,6 +34,12 @@ export const mappingSetting: SutechConfigItem[] = [
     'plcAddress': 'M21',
     'bitIndex': 0,
     'name': '키캠값',
+    'dataType': 'B',
+  },
+  {
+    'dataCode': 'press_key_cam_state',
+    'plcAddress': 'M21',
+    'name': '키캠상태',
     'dataType': 'B',
   },
   {
@@ -49,7 +62,7 @@ export const mappingSetting: SutechConfigItem[] = [
   },
   {
     'dataCode': 'press_inverter_spm',
-    'plcAddress': 'L67',
+    'plcAddress': 'L58',
     'name': '인버터 분당 회전수',
     'dataType': 'B',
   },
