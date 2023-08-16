@@ -4,28 +4,28 @@ export const mappingSetting: SutechConfigItem[] = [
   {
     'dataCode': 'press_key_cam_inching',
     'plcAddress': 'P0',
-    'bitIndex': 2, //c
+    'bitIndex': 12, //c
     'name': '키캠값',
     'dataType': 'B',
   },
   {
     'dataCode': 'press_key_cam_one_cycle',
     'plcAddress': 'P0',
-    'bitIndex': 3,  //d
+    'bitIndex': 13,  //d
     'name': '키캠값',
     'dataType': 'B',
   },
   {
     'dataCode': 'press_key_cam_continue',
     'plcAddress': 'P0',
-    'bitIndex': 4,  //e
+    'bitIndex': 14,  //e
     'name': '키캠값',
     'dataType': 'B',
   },
   {
     'dataCode': 'press_key_cam_slide',
     'plcAddress': 'P0',
-    'bitIndex': 0, //a
+    'bitIndex': 10, //a
     'name': '키캠값',
     'dataType': 'B',
   },

@@ -69,8 +69,6 @@ export class InfluxClient {
   }
 
   getKeyCam(state: number, inching: number, oneCycle: number, camContinue: number, slide: number) {
-    if (state == 0)
-      return 0
     if (inching == 1)
       return 1
     if (oneCycle == 1)
@@ -79,6 +77,8 @@ export class InfluxClient {
       return 3
     if (slide == 1)
       return 4
+    if (state == 0)
+      return 0
     return 0
   }
 
