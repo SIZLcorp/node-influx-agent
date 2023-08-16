@@ -45,6 +45,7 @@ declare module 'InfluxClient' {
     'press_key_cam_inching' |
     'press_key_cam_one_cycle' |
     'press_key_cam_continue' |
+    'press_key_cam_state' |
     'press_run_ready' |
     'press_run_ok' |
     'press_motor_state' |
