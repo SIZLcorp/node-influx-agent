@@ -40,7 +40,7 @@ export class InfluxClient {
       result.press_error_number = this.parseErrorCode(data.press_error_number || 0)
     }
     if (this.checkKeyCam(data)) {
-      result.press_key_cam = this.getKeyCam(data.press_key_cam_inching || 0, data.press_key_cam_one_cycle || 0,
+      result.press_key_cam = this.getKeyCam(data.press_key_cam_state || 0, data.press_key_cam_inching || 0, data.press_key_cam_one_cycle || 0,
         data.press_key_cam_continue || 0, data.press_key_cam_slide || 0)
     }
     if (this.checkWholeCounter(data)) {
@@ -68,7 +68,7 @@ export class InfluxClient {
     return `${hrs.toString().padStart(2, '0')}:${mins2.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`
   }
 
-  getKeyCam(inching: number, oneCycle: number, camContinue: number, slide: number) {
+  getKeyCam(state: number, inching: number, oneCycle: number, camContinue: number, slide: number) {
     if (inching == 1)
       return 1
     if (oneCycle == 1)
@@ -77,6 +77,8 @@ export class InfluxClient {
       return 3
     if (slide == 1)
       return 4
+    if (state == 0)
+      return 0
     return 0
   }
 
@@ -91,6 +93,7 @@ export class InfluxClient {
       || (data.press_key_cam_one_cycle !== null && data.press_key_cam_one_cycle !== undefined)
       || (data.press_key_cam_continue !== null && data.press_key_cam_continue !== undefined)
       || (data.press_key_cam_slide !== null && data.press_key_cam_slide !== undefined)
+    || (data.press_key_cam_state !== null && data.press_key_cam_state !== undefined)
   }
 
   checkWholeCounter(data: EquipmentScanResult) {

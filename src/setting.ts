@@ -3,35 +3,48 @@ import { SutechConfigItem } from './sutechEquipment'
 export const mappingSetting: SutechConfigItem[] = [
   {
     'dataCode': 'press_key_cam_inching',
-    'plcAddress': 'M75',
-    'bitIndex': 0,
+    'plcAddress': 'P0',
+    'bitIndex': 12, //c
     'name': '키캠값',
     'dataType': 'B',
   },
   {
     'dataCode': 'press_key_cam_one_cycle',
-    'plcAddress': 'M75',
-    'bitIndex': 1,
+    'plcAddress': 'P0',
+    'bitIndex': 13,  //d
     'name': '키캠값',
     'dataType': 'B',
   },
   {
     'dataCode': 'press_key_cam_continue',
-    'plcAddress': 'M75',
-    'bitIndex': 2,
+    'plcAddress': 'P0',
+    'bitIndex': 14,  //e
     'name': '키캠값',
     'dataType': 'B',
   },
   {
     'dataCode': 'press_key_cam_slide',
-    'plcAddress': 'M75',
-    'bitIndex': 3,
+    'plcAddress': 'P0',
+    'bitIndex': 10, //a
     'name': '키캠값',
     'dataType': 'B',
   },
   {
+    'dataCode': 'press_key_cam_slide',
+    'plcAddress': 'M21',
+    'bitIndex': 0,
+    'name': '키캠값',
+    'dataType': 'B',
+  },
+  {
+    'dataCode': 'press_key_cam_state',
+    'plcAddress': 'M21',
+    'name': '키캠상태',
+    'dataType': 'B',
+  },
+  {
     'dataCode': 'press_spm',
-    'plcAddress': 'L58',
+    'plcAddress': 'L67',
     'name': '분당 회전수(SPM)',
     'dataType': 'B',
   },
