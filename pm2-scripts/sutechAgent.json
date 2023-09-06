@@ -1,7 +1,7 @@
 {
 	"apps": [
 		{
-			"name": "Agent09",
+			"name": "Agent159",
 			"script": "node",
             "args": "dist",
 			"env": {
@@ -12,7 +12,7 @@
 			}
 		},
 		{
-			"name": "Agent08",
+			"name": "Agent158",
 			"script": "node",
             "args": "dist",
 			"env": {
@@ -20,17 +20,6 @@
 				"EQUIPMENT_HOST": "192.168.0.158",
 				"EQUIPMENT_DESCRIPTION": "화일 250",
 				"MACHINE_CODE": "P0000158"
-			}
-		},
-		{
-			"name": "Agent07",
-			"script": "node",
-            "args": "dist",
-			"env": {
-				"DEBUG": "su-agent:influx:*",
-				"EQUIPMENT_HOST": "192.168.0.157",
-				"EQUIPMENT_DESCRIPTION": "서울 200",
-				"MACHINE_CODE": "P0000157"
 			}
 		},
 		{
