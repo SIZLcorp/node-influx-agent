@@ -85,6 +85,10 @@ export class InfluxClient {
   parseErrorCode(errorCode: number) {
     if (errorCode == 0)
       return 0
+
+    if (errorCode === 27) // 안정기 이상 에러 무시
+      return 0
+
     return 500 + errorCode
   }
 
@@ -93,7 +97,7 @@ export class InfluxClient {
       || (data.press_key_cam_one_cycle !== null && data.press_key_cam_one_cycle !== undefined)
       || (data.press_key_cam_continue !== null && data.press_key_cam_continue !== undefined)
       || (data.press_key_cam_slide !== null && data.press_key_cam_slide !== undefined)
-    || (data.press_key_cam_state !== null && data.press_key_cam_state !== undefined)
+      || (data.press_key_cam_state !== null && data.press_key_cam_state !== undefined)
   }
 
   checkWholeCounter(data: EquipmentScanResult) {
