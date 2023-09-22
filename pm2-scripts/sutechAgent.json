@@ -1,6 +1,39 @@
 {
 	"apps": [
 		{
+			"name": "Agent146",
+			"script": "node",
+            "args": "dist",
+			"env": {
+				"DEBUG": "su-agent:influx:*",
+				"EQUIPMENT_HOST": "192.168.0.146",
+				"EQUIPMENT_DESCRIPTION": "심팩 600",
+				"MACHINE_CODE": "P0000146"
+			}
+		},
+		{
+			"name": "Agent148",
+			"script": "node",
+            "args": "dist",
+			"env": {
+				"DEBUG": "su-agent:influx:*",
+				"EQUIPMENT_HOST": "192.168.0.148",
+				"EQUIPMENT_DESCRIPTION": "심팩 250",
+				"MACHINE_CODE": "P0000148"
+			}
+		},
+		{
+			"name": "Agent149",
+			"script": "node",
+            "args": "dist",
+			"env": {
+				"DEBUG": "su-agent:influx:*",
+				"EQUIPMENT_HOST": "192.168.0.149",
+				"EQUIPMENT_DESCRIPTION": "심팩 400",
+				"MACHINE_CODE": "P0000149"
+			}
+		},
+		{
 			"name": "Agent159",
 			"script": "node",
             "args": "dist",
