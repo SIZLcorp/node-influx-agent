@@ -1,0 +1,33 @@
+@startuml
+class SutechEquipment {
+  -xgtClient: XGTClient
+  -memoryMap: SutechConfigItem[]
+  -startAt: Date | null
+  -endAt: Date | null
+  -isScanning: boolean
+  -memory: EquipmentMemory
+  +constructor(config: XGTClientConfig, memoryMap: SutechConfigItem[])
+  +scan(): Promise<void>
+  +getBitFromUInt16LE(data: number, bitIndex: number): number
+  +reset(): void
+  +getMemory(): Promise<EquipmentScanResult | null>
+}
+note right of SutechEquipment::xgtClient
+  XGTClient instance
+end note
+note right of SutechEquipment::memoryMap
+  Memory map configuration
+end note
+note right of SutechEquipment::startAt
+  Scan start time
+end note
+note right of SutechEquipment::endAt
+  Scan end time
+end note
+note right of SutechEquipment::isScanning
+  Is currently scanning
+end note
+note right of SutechEquipment::memory
+  Current memory state
+end note
+@enduml

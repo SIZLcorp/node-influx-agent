@@ -1,0 +1,29 @@
+@startuml
+class XGTClient {
+  -status: SocketStatus
+  -config: XGTClientConfig
+  -socket: net.Socket
+  -intervalConnect: NodeJS.Timer | null
+  +constructor(config: XGTClientConfig)
+  +getInstance(config: XGTClientConfig): XGTClient
+  +launchIntervalConnect(): void
+  +clearIntervalConnect(): void
+  +setStatus(status: SocketStatus): void
+  +connect(): Promise<net.Socket>
+  +disconnect(): void
+  +readData(address: XGTAddressType, dataType: XGTDataTypeChar): Promise<number | null>
+  -request_data(reqData: Buffer): Promise<number | null>
+}
+note right of XGTClient::status
+  Current socket status
+end note
+note right of XGTClient::config
+  XGTClient configuration
+end note
+note right of XGTClient::socket
+  Socket instance
+end note
+note right of XGTClient::intervalConnect
+  Interval for connection attempts
+end note
+@enduml

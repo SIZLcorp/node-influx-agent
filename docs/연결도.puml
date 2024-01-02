@@ -1,0 +1,41 @@
+@startuml
+
+component "Device Controller" {
+  [Press Equipment Controller]
+}
+
+[Press Equipment Controller] - TCP
+
+component "Edge Device" {
+
+  database "LocalDB" {
+    [logs]
+    [models]
+    [syncs]
+    [configs]
+  }
+
+  package "Data Acqusition Module: sutechEquipment" {
+    [XGTClient] .. [logs]
+  }
+
+  TCP --> [XGTClient]
+
+  package "Edge Software" {
+    LocalDB .. [Edge Software]
+  }
+
+  [Edge Software] --> HTTP
+
+
+
+}
+
+
+cloud {
+  database "TimeSeries DB" {
+    HTTP - [TimeSeries DB]
+  }
+}
+
+@enduml
