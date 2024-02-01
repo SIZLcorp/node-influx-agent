@@ -34,7 +34,7 @@ async function iterateRows() {
   }
   console.log('\nIterateRows SUCCESS')
 }
-iterateRows().catch((error) => console.error('IterateRows ERROR', error))
+// iterateRows().catch((error) => console.error('IterateRows ERROR', error))
 
 // Execute query and receive table metadata and rows in a result observer.
 function queryRows() {
@@ -43,8 +43,8 @@ function queryRows() {
     next: (row: string[], tableMeta: FluxTableMetaData) => {
       // the following line creates an object for each row
       const o = tableMeta.toObject(row)
-      // console.log(JSON.stringify(o, null, 2))
-      console.log(`${o._time} ${o._measurement} in '${o.location}' (${o.example}): ${o._field}=${o._value}`)
+      console.log(JSON.stringify(o))
+      // console.log(`${o._time} ${o._measurement} in '${o.location}' (${o.example}): ${o._field}=${o._value}`)
 
       // alternatively, you can get only a specific column value without
       // the need to create an object for every row
