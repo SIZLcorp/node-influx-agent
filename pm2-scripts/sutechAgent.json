@@ -12,6 +12,17 @@
 			}
 		},
 		{
+			"name": "Agent147",
+			"script": "node",
+            "args": "dist",
+			"env": {
+				"DEBUG": "su-agent:influx:*",
+				"EQUIPMENT_HOST": "192.168.0.147",
+				"EQUIPMENT_DESCRIPTION": "HIM 300",
+				"MACHINE_CODE": "P0000147"
+			}
+		},
+		{
 			"name": "Agent148",
 			"script": "node",
             "args": "dist",
